@@ -1,4 +1,4 @@
-from machine import *
+from machine import Pin, UART
 import time, ustruct, ujson
 #Show blink LED to confirm Sucessful Boot
 activeLED = Pin(25, Pin.OUT)
