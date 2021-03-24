@@ -8,8 +8,8 @@ while bootCheck < 8:
     time.sleep_ms(500)
     bootCheck+=1
 
-midiOUT = UART(1,31250)
-midiIN = UART(2,31250)
+midiOUT = UART(0,31250)
+midiIN = UART(1,31250)
 #Footswitch Var template Pin(14, machine.Pin.IN, machine.Pin.PULL_DOWN)
 
 def sendMidiNote(note):
