@@ -1,9 +1,9 @@
-from machine import Pin, UART
-import time, ustruct, ujson
+from machine import Pin, UART, I2C
+import time, ustruct, liquidcrystal_i2c
 #Show blink LED to confirm Sucessful Boot
 activeLED = Pin(25, Pin.OUT)
 bootCheck = 0
-while bootCheck < 8:
+while bootCheck < 2:
     activeLED.toggle()
     time.sleep_ms(500)
     bootCheck+=1
@@ -58,3 +58,21 @@ class footswitch():
         elif self.type == 2:
             sendMidiNote(self.value)
 
+sda=Pin(20)
+scl=Pin(21)
+i2c=I2C(0,sda=sda, scl=scl, freq=400000)
+print(i2c.scan())
+i2c.writeto(39, '\x04')
+i2c.writeto(39, '\x01')
+i2c.writeto(39, '\x02')
+#i2c.writeto(39, "hello world")
+"""
+cols = 20
+rows = 4
+
+lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=rows)
+
+lcd.printline(0, 'LCM2004 IIC V2'.center(cols))
+lcd.printline(1, 'and'.center(cols))
+lcd.printline(2, 'python-')
+lcd.printline(3, 'liquidcrystal_i2c'.rjust(cols))"""
