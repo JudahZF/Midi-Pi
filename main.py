@@ -12,6 +12,7 @@ midiOUT = UART(0,31250)
 midiIN = UART(1,31250)
 #Footswitch Var template Pin(14, machine.Pin.IN, machine.Pin.PULL_DOWN)
 
+#Defines diffent possible midi messages
 def sendMidiNote(note):
     activeLED.value(1)
     midiOUT.write(ustruct.pack("bbb",0x90,note,127))
@@ -32,3 +33,28 @@ def sendMidiPC(program):
 
 def midiRead():
     return midiIN.read()
+
+class footswitch():
+    def __init__ (self):
+        self.value = 0
+        self.program = 0
+        self.type = 0 #Types cc = 0 pc = 1 notes = 2
+    
+    def setup (self, type, program):
+        if str(type).lower() == "cc":
+            self.type = 0
+        elif str(type).lower() == "pc":
+            self.type = 1
+        elif str(type).lower() == "notes":
+            self.type = 2
+        else: self.type = 0
+        self.program = program
+    
+    def sendMessage (self):
+        if self.type == 0:
+            sendMidiCC(self.program, self.value)
+        elif self.type == 1:
+            sendMidiPC(self.program)
+        elif self.type == 2:
+            sendMidiNote(self.value)
+
