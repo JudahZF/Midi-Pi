@@ -57,3 +57,8 @@ class footswitch():
             sendMidiPC(self.program)
         elif self.type == 2:
             sendMidiNote(self.value)
+
+fstest = Pin(2, Pin.IN, Pin.PULL_DOWN)
+while True:
+    time.sleep(0.25)
+    print(fstest.value())
