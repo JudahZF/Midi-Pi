@@ -1,7 +1,7 @@
 from machine import Pin, UART, I2C
 import ustruct, gc, utime
 from time import sleep, sleep_ms, sleep_us
-from LCD_Driver import i2c_Lcd
+import lcd_driver
 
 i2c = I2C(0, sda=Pin(0), scl=Pin(1), freq=400000)
 I2C_ADDR = i2c.scan()[0]
