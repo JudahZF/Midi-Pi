@@ -1,11 +1,9 @@
-from machine import Pin, UART
-import time, ustruct
 #Show blink LED to confirm Sucessful Boot
 activeLED = Pin(25, Pin.OUT)
 bootCheck = 0
 while bootCheck < 2:
     activeLED.toggle()
-    time.sleep_ms(500)
+    sleep_ms(500)
     bootCheck+=1
 
 midiOUT = UART(0,31250)
@@ -34,6 +32,7 @@ def sendMidiPC(program):
 def midiRead():
     return midiIN.read()
 
+# Footswitch Class
 class footswitch():
     def __init__ (self):
         self.value = 0
@@ -59,6 +58,3 @@ class footswitch():
             sendMidiNote(self.value)
 
 fstest = Pin(2, Pin.IN, Pin.PULL_DOWN)
-while True:
-    time.sleep(0.25)
-    print(fstest.value())
