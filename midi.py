@@ -1,36 +1,33 @@
-#Show blink LED to confirm Sucessful Boot
-activeLED = Pin(25, Pin.OUT)
-bootCheck = 0
-while bootCheck < 2:
-    activeLED.toggle()
-    sleep_ms(500)
-    bootCheck+=1
+from machine import Pin, UART, I2C
+import ustruct, gc, utime
+from time import sleep, sleep_ms, sleep_us
 
-midiOUT = UART(0,31250)
-midiIN = UART(1,31250)
-#Footswitch Var template Pin(14, machine.Pin.IN, machine.Pin.PULL_DOWN)
+# Defines diffent possible midi messages
+class midi ():
+    def __init__ (MidiOut, MidiIn, ActiveLED, self):
+        self.LED = ActiveLED
+        self.IN = MidiIn
+        self.OUT = MidiOut
+    def sendNote(note, self):
+        self.LED.value(1)
+        self.OUT.write(ustruct.pack("bbb",0x90,note,127))
+        sleep(50)
+        self.LED.value(0)
+        sleep(50)
+        self.OUT.write(ustruct.pack("bbb",0x80,note,0))
 
-#Defines diffent possible midi messages
-def sendMidiNote(note):
-    activeLED.value(1)
-    midiOUT.write(ustruct.pack("bbb",0x90,note,127))
-    time.sleep(0.5)
-    activeLED.value(0)
-    time.sleep(0.5)
-    midiOUT.write(ustruct.pack("bbb",0x80,note,0))
+    def sendCC(program, value, self):
+        self.LED.value(1)
+        sleep_ms(50)
+        self.OUT.write(b"\xb0" + program.to_bytes(1, "big") + value.to_bytes(1, "big"))
+        sleep_ms(50)
+        self.LED.value(0)
 
-def sendMidiCC(program, value):
-    activeLED.value(1)
-    time.sleep(0.5)
-    midiOUT.write(b"\xb0" + program.to_bytes(1, "big") + value.to_bytes(1, "big"))
-    time.sleep(0.5)
-    activeLED.value(0)
+    def sendPC(program, self):
+        self.OUT.write(b"\xc0" + program.to_bytes(1, "big"))
 
-def sendMidiPC(program):
-    midiOUT.write(b"\xc0" + program.to_bytes(1, "big"))
-
-def midiRead():
-    return midiIN.read()
+    def read(self):
+        return self.IN.read()
 
 # Footswitch Class
 class footswitch():

@@ -1,3 +1,7 @@
+from machine import Pin, UART, I2C
+import ustruct, gc, utime
+from time import sleep, sleep_ms, sleep_us
+
 class LcdApi:
     """Implements the API for talking with HD44780 compatible character LCDs.
     This class only knows what commands to send to the LCD, and not how to get
@@ -47,10 +51,10 @@ class LcdApi:
     I2C_NUM_COLS = 20
 
     def __init__(self, num_lines, num_columns):
-        self.num_lines = num_lines
+        self.num_lines = 4
         if self.num_lines > 4:
             self.num_lines = 4
-        self.num_columns = num_columns
+        self.num_columns = 20
         if self.num_columns > 40:
             self.num_columns = 40
         self.cursor_x = 0
