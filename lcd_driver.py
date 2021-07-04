@@ -1,6 +1,6 @@
-from machine import Pin, UART, I2C
+from machine import *
 import ustruct, gc, utime
-from time import sleep, sleep_ms, sleep_us
+from time import *
 
 class LcdApi:
     """Implements the API for talking with HD44780 compatible character LCDs.

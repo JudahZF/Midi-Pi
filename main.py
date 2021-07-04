@@ -1,7 +1,8 @@
-from machine import Pin, UART, I2C
-import ustruct, gc, utime
-from time import sleep, sleep_ms, sleep_us
+from machine import *
+import ustruct, gc, utime, json
+from time import *
 from lcd_driver import I2cLcd
+from effects import *
 from midi import *
 
 # Blink LED to confirm Sucessful Boot
@@ -15,17 +16,13 @@ while bootCheck < 4:
     bootCheck+=1
 
 # LCD Setup
-i2c = I2C(0, sda=Pin(0), scl=Pin(1), freq=400000)
+i2c = I2C(0, sda=Pin(2), scl=Pin(3), freq=400000)
 I2C_ADDR = i2c.scan()[0]
-print("Hex address: ",hex(I2C_ADDR))
 lcd = I2cLcd(i2c, I2C_ADDR, 2, 16)
 lcd.blink_cursor_off()
 lcd.clear()
 lcd.hide_cursor()
-
-# Midi Setup
-midiOUT = UART(0,31250)
-midiIN = UART(1,31250)
+lcd.backlight_on()
 
 # Footswitch Pin Exaple
 """
@@ -46,3 +43,36 @@ while True:
     sleep_ms(25)
     y+=1
 """
+
+# Boot Screen
+#           --------------------
+lcd.putstr("      Midi  Pi      ")
+lcd.putstr(" Please set effects ")
+lcd.putstr(" to default values  ")
+lcd.putstr(" Booting:")
+
+# Define Footswitches 6-15
+FootSwitches = [footSwitch(0, 6), footSwitch(1, 7), footSwitch(2, 8), footSwitch(3, 9), footSwitch(4, 10), footSwitch(5, 11), footSwitch(6, 12), footSwitch(7, 13), footSwitch(8, 14), footSwitch(9, 15)]
+lcd.putchar("#")
+
+# Load JSON
+file = open("settings.json", 'r')
+settings = json.load(file)
+file.close()
+lcd.putchar("#")
+print(settings)
+if str(settings) == "{}":
+    print("empty JSON")
+if settings["firstSetup"] == True:
+    
+
+# Main Loop
+"""
+While True:
+
+"""
+
+sleep(4)
+lcd.backlight_off()
+print("off")
+lcd.clear()

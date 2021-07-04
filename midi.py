@@ -1,33 +1,32 @@
-from machine import Pin, UART, I2C
+from machine import *
 import ustruct, gc, utime
-from time import sleep, sleep_ms, sleep_us
+from time import *
 
-# Defines diffent possible midi messages
-class midi ():
-    def __init__ (MidiOut, MidiIn, ActiveLED, self):
-        self.LED = ActiveLED
-        self.IN = MidiIn
-        self.OUT = MidiOut
-    def sendNote(note, self):
-        self.LED.value(1)
-        self.OUT.write(ustruct.pack("bbb",0x90,note,127))
-        sleep(50)
-        self.LED.value(0)
-        sleep(50)
-        self.OUT.write(ustruct.pack("bbb",0x80,note,0))
+activeLED = Pin(25, Pin.OUT)
+midiOUT = UART(0,31250)
+midiIN = UART(1,31250)
 
-    def sendCC(program, value, self):
-        self.LED.value(1)
-        sleep_ms(50)
-        self.OUT.write(b"\xb0" + program.to_bytes(1, "big") + value.to_bytes(1, "big"))
-        sleep_ms(50)
-        self.LED.value(0)
+def noteOn(note):
+    midiOUT.write(ustruct.pack("bbb",0x90,note,127))
+    
+def noteOff(note):
+    midiOUT.write(ustruct.pack("bbb",0x80,note,0))
+    
+def momentaryNote(note):
+    noteOn(note)
+    sleep_ms(50)
+    noteOff(note)
 
-    def sendPC(program, self):
-        self.OUT.write(b"\xc0" + program.to_bytes(1, "big"))
+def sendCC(program, value):
+    sleep_ms(50)
+    midiOUT.write(b"\xb0" + program.to_bytes(1, "big") + value.to_bytes(1, "big"))
+    sleep_ms(50)
 
-    def read(self):
-        return self.IN.read()
+def sendPC(program):
+    midiOUT.write(b"\xc0" + program.to_bytes(1, "big"))
+
+def read():
+    return midiIN.read()
 
 # Footswitch Class
 class footswitch():
