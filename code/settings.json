@@ -1,0 +1,29 @@
+{
+    "firstSetup": false,
+    "mode": "Stomp",
+    "currentSong": 0,
+    "songs": [
+        {
+            "name": "Lion & The Lamb",
+            "shortName": "Lion & Lamb"
+            "sshortName": "L&TL"
+            "bpm": 90
+        }
+    ],
+    "effects": [
+        {
+            "name": "flange",
+            "type": 1,
+            "program": 64,
+            "value": 127
+        }
+    ],
+    "footSwitchesEffects": [
+        {
+            "effect": 0,
+            "holdEffect": 0,
+            "upEffect": 0,
+            "rightEffect": 0
+        }
+    ]
+}

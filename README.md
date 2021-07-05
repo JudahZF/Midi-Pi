@@ -7,6 +7,10 @@
   - [ ] Tap
   - [ ] Hold
   - [ ] Dual Switch Tap
-- [ ] Program MIDI Interface
-- [ ] Program UI
+- [x] Program MIDI Interface
+- [x] Program UI
 - [ ] Program Editor
+- [ ] Program Modes:
+  - [x] Stomp
+  - [ ] Song
+  - [ ] Edit
