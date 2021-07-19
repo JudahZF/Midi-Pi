@@ -1,6 +1,7 @@
 {
     "firstSetup": false,
     "mode": "Stomp",
+    "midiHost": "USB",
     "currentSong": 1,
     "songs": [
         {
