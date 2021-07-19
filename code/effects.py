@@ -1,4 +1,3 @@
-from machine import *
 import ustruct, gc, utime, midi
 from time import *
 

@@ -1,5 +1,4 @@
-from machine import *
-import ustruct, gc, utime, json, sys
+import gc, json, sys, busio, lcd_driver
 from time import *
 from lcd_driver import I2cLcd
 from effects import *
