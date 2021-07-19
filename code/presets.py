@@ -1,9 +1,9 @@
-import ustruct, gc, utime, midi, effects
-from time import *
+import midi
+import time
 
 class Song ():
-    
-    def __init__ (self, name, shortName, ssName, bpm, key, PC):
+
+    def __init__(self, name, shortName, ssName, bpm, key, PC):
         self.name = name
         self.shortName = shortName
         self.sshortName = ssName
@@ -11,17 +11,19 @@ class Song ():
         self.key = key
         self.bpmS = 60 / self.bpm
         self.PC = PC
-    
+
+    """
     def sendPC(self):
         midi.sendPC(self.PC)
-    
-    def sendBPM (self, midiBPM):
-        sleep_ms(10)
+
+    def sendBPM(self, midiBPM):
+        time.sleep_ms(10)
         midiBPM()
-        sleep(self.bpmS)
+        time.sleep(self.bpmS)
         midiBPM()
-        sleep(self.bpmS)
+        time.sleep(self.bpmS)
         midiBPM()
-        sleep(self.bpmS)
+        time.sleep(self.bpmS)
         midiBPM()
-        sleep_ms(10)
+        time.sleep_ms(10)
+    """

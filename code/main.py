@@ -9,6 +9,7 @@ import ui
 import board
 import adafruit_character_lcd.character_lcd_rgb_i2c as character_lcd
 
+print("help")
 # LCD Setup
 # i2c setup, higher frequency for display refresh
 lcd_columns = 20

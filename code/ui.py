@@ -1,31 +1,32 @@
-from machine import *
-import ustruct, gc, utime, json, sys
-from time import *
-from lcd_driver import I2cLcd
-from effects import *
-from midi import *
-from presets import *
-
-
 def addBPM(song, line):
-    if len(str(song.bpm)) == 2: line = line + " T: " + str(song.bpm)
-    elif len(str(song.bpm)) == 3: line = line + " T:" + str(song.bpm)
+    if len(str(song.bpm)) == 2:
+        line = line + " T: " + str(song.bpm)
+    elif len(str(song.bpm)) == 3:
+        line = line + " T:" + str(song.bpm)
     return line
+
 
 def addKey(song, line):
-    if len(str(song.key)) == 1: line = line + " " + chr(2) + ":" + str(song.key) + " "
-    elif len(str(song.key)) == 2: line = line +" " + chr(2) + ":" + str(song.key)
+    if len(str(song.key)) == 1:
+        line = line + " " + chr(2) + ":" + str(song.key) + " "
+    elif len(str(song.key)) == 2:
+        line = line + " " + chr(2) + ":" + str(song.key)
     return line
+
 
 def shortenName(song, length):
     leng = length
     songName = song.name
-    if len(songName) >= leng: songName = song.shortName
-    if (len(songName) >= leng) and (8 >= leng): songName = song.sshortName
-    if len(songName) >= leng: songName = songName[:leng]
+    if len(songName) >= leng:
+        songName = song.shortName
+    if (len(songName) >= leng) and (8 >= leng):
+        songName = song.sshortName
+    if len(songName) >= leng:
+        songName = songName[:leng]
     while len(songName) < leng:
         songName = songName + " "
     return songName
+
 
 def line0(song, displayMode):
     if displayMode == "BPM":
@@ -45,6 +46,7 @@ def line0(song, displayMode):
         line = addBPM(song, line)
         return line
 
+
 def line1(song, displayMode):
     if displayMode == "BPM":
         songName = shortenName(song, 9)
@@ -63,6 +65,7 @@ def line1(song, displayMode):
         line = addBPM(song, line)
         return line
 
+
 def line2(song, displayMode):
     if displayMode == "BPM":
         songName = shortenName(song, 9)
@@ -80,6 +83,7 @@ def line2(song, displayMode):
         line = addKey(song, line)
         line = addBPM(song, line)
         return line
+
 
 def line3(mode):
     line = "Mode:" + mode
