@@ -2,7 +2,7 @@ from machine import *
 import ustruct, gc, utime, midi
 from time import *
 
-class effect ():
+class action ():
     
     def __init__(self, name, type, program, value = 0, state = False):
         self.name = name
@@ -10,105 +10,59 @@ class effect ():
         self.program = program
         self.value = value
         self.state = state
-        if type == 0:
-            self.write = midi.momentaryNote(self.program)
-        elif type == 1:
-            self.write = midi.sendCC(self.program, self.value)
-        elif type == 2:
-            self.write = midi.sendPC(self.program, self.value)
+    
+    def write(self):
+        if self.type == 0:
+            midi.momentaryNote(self.program)
+        elif self.type == 1:
+            midi.sendCC(self.program, self.value)
+        elif self.type == 2:
+            midi.sendPC(self.program, self.value)
+        elif self.type == 9:
+            print(self.program)
             
     def toggle(self):
-        self.write
+        self.write()
         self.state = not self.state
     
     def setState(self, state):
         if state != self.state:
             self.write()
-            self.state.toggle()
+            self.toggle()
 
 class footSwitch ():
     
     def __init__(self, number, pin):
         self.no = number
         self.IO = Pin(pin, Pin.IN, Pin.PULL_DOWN)
-        self.effect = False
-        self.holdEffect = False
-        self.upEffect = False
-        self.rightEffect = False
-        
-    def setEffect(self, effect, holdEffect, upEffect, rightEffect):
-        self.effect = effect
-        self.holdEffect = holdEffect
-        self.upEffect = upEffect
-        self.rightEffect = rightEffect
+        self.action = action("fsnull0", 9, 127)
+        self.holdAction = action("fsnull1", 9, 0)
     
-    def setMode(self, mode):
+    def setAction(self, mode, action, holdAction):
         if mode == 0:
-            self.action = self.effect
-            self.upAction = self.upEffect
-            self.holdAction = self.holdEffect
-            self.rightAction = self.rightEffect
+            self.action = action
+            self.holdAction = holdAction
         elif mode == 1:
             print("MODE ERROR")
             
-    def up(self):
-        self.upAction()
-    
-    def right(self):
-        self.rightAction()
-    
     def tap(self):
-        self.action()
+        self.action.toggle()
     
     def hold(self):
-        self.holdAction()
+        self.holdAction.toggle()
 
 
 # FS setup
 
 def checkFS(FS, Htime):
     tapped = False
-    x = 0
     for i in FS:
-        if (x == 4) or (x == 8):
-            if i.IO.value() == 1:
-                start_time = time()
-                while i.IO.value() == 1: pass
-                holdTime = start_time - time()
-                if holdTime >= Htime: i.hold()
-                else: i.tap()
-                tapped = True
-        elif x == 0:
-            if i.IO.value() == 1:
-                start_time = time()
-                while i.IO.value() == 1: pass
-                holdTime = start_time - time()
-                if holdTime >= Htime:
-                    if (i.IO.value() == 1) & (FS[x-2].IO.value() == 1): i.up()
-                    else: i.hold()
-                else: i.tap()
-                tapped = True
-        elif (x == 5) or (x == 9):
-            if i.IO.value() == 1:
-                start_time = time()
-                while i.IO.value() == 1: pass
-                holdTime = start_time - time()
-                if holdTime >= Htime:
-                    if (i.IO.value() == 1) & (FS[x+1].IO.value() == 1): i.right()
-                    else: i.hold()
-                else: i.tap()
-                tapped = True
-        elif (x == 1) or (x == 2) or (x == 3) or (x == 6) or (x == 7):
-            if i.IO.value() == 1:
-                start_time = time()
-                while i.IO.value() == 1: pass
-                holdTime = start_time - time()
-                if holdTime >= Htime:
-                    if (i.IO.value() == 1) & (FS[x-2].IO.value() == 1): i.up()
-                    elif (i.IO.value() == 1) & (FS[x+1].IO.value() == 1): i.right()
-                    else: i.hold()
-                else: i.tap()
-                tapped = True
-        x=x+1
+        if i.IO.value() == 1:
+            start_time = time()
+            while i.IO.value() == 1: pass
+            holdTime = start_time - time()
+            if holdTime >= Htime: i.hold()
+            else: i.tap()
+            tapped = True
     if tapped == False: return False
     elif tapped == True: return True
