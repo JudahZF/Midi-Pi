@@ -36,8 +36,8 @@ class footSwitch:
     def __init__(self, number, pin):
         self.no = number
         self.IO = digitalio.DigitalInOut(pin)
-        self.action = action("fsnull0", 9, 127)
-        self.holdAction = action("fsnull1", 9, 0)
+        self.action = action("fsnull0", 9, 127, 0, False)
+        self.holdAction = action("fsnull1", 9, 0, 0, False)
 
     def setAction(self, action, holdAction):
         self.action = action
@@ -56,9 +56,9 @@ class footSwitch:
 def checkFS(FS, Htime):
     tapped = False
     for i in FS:
-        if i.IO.value() == 1:
+        if i.IO.value is True:
             start_time = time()
-            while i.IO.value() is True:
+            while i.IO.value is True:
                 pass
             holdTime = start_time - time()
             if holdTime >= Htime:

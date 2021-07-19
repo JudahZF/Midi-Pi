@@ -6,24 +6,24 @@
     "songs": [
         {
             "name": "Lion & The Lamb",
-            "shortName": "Lion & Lamb",
-            "sshortName": "L&TL",
+            "sName": "Lion & Lamb",
+            "ssName": "L&TL",
             "key": "A"
             "bpm": 90,
             "PC": 0
         },
         {
             "name": "Let Go",
-            "shortName": "Let Go",
-            "sshortName": "LG",
+            "sName": "Let Go",
+            "ssName": "LG",
             "key": "C"
             "bpm": 126,
             "PC": 1
         },
         {
             "name": "This Is A Song",
-            "shortName": "A Song",
-            "sshortName": "TAS",
+            "sName": "A Song",
+            "ssName": "TAS",
             "key": "C#"
             "bpm": 126,
             "PC": 1
