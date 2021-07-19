@@ -17,7 +17,7 @@ class action ():
         elif self.type == 1:
             midi.sendCC(self.program, self.value)
         elif self.type == 2:
-            midi.sendPC(self.program, self.value)
+            midi.sendPC(self.program)
         elif self.type == 9:
             print(self.program)
             
@@ -38,12 +38,9 @@ class footSwitch ():
         self.action = action("fsnull0", 9, 127)
         self.holdAction = action("fsnull1", 9, 0)
     
-    def setAction(self, mode, action, holdAction):
-        if mode == 0:
-            self.action = action
-            self.holdAction = holdAction
-        elif mode == 1:
-            print("MODE ERROR")
+    def setAction(self, action, holdAction):
+        self.action = action
+        self.holdAction = holdAction
             
     def tap(self):
         self.action.toggle()

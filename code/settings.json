@@ -5,12 +5,13 @@
     "songs": [
         {
             "name": "Lion & The Lamb",
-            "shortName": "Lion & Lamb"
-            "sshortName": "L&TL"
-            "bpm": 90
+            "shortName": "Lion & Lamb",
+            "sshortName": "L&TL",
+            "bpm": 90,
+            "PC": 0
         }
     ],
-    "effects": [
+    "actions": [
         {
             "name": "flange",
             "type": 1,

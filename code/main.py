@@ -84,19 +84,19 @@ if str(settings) == "{}":
 
 # Import Presets & Settings
 songs = []
-effects = []
+actions = []
 if settings["firstSetup"] == True:
     lcd.clear()
     lcd.putstr("                    ")
     lcd.putstr("    Please Setup    ")
     shutdown(8)
 for i in settings["songs"]:
-    songs.append(Song(i["name"], i["shortName"], i["sshortName"], i["bpm"]))
+    songs.append(Song(i["name"], i["shortName"], i["sshortName"], i["bpm"], i["PC"]))
 lcd.putstr("#")
 
 # Import Effects
-for i in settings["effects"]:
-    effects.append(effect(i["name"], i["type"], i["program"], i["value"]))
+for i in settings["actions"]:
+    actions.append(action(i["name"], i["type"], i["program"], i["value"]))
 lcd.putstr("#")
 
 # Import Footswitches
