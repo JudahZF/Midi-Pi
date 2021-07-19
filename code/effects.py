@@ -63,5 +63,4 @@ def checkFS(FS, Htime):
             if holdTime >= Htime: i.hold()
             else: i.tap()
             tapped = True
-    if tapped == False: return False
-    elif tapped == True: return True
+    return tapped
