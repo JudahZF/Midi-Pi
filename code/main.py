@@ -1,6 +1,5 @@
-import gc, json, sys, busio, lcd_driver
+import gc, json, sys, busio
 from time import *
-from lcd_driver import I2cLcd
 from effects import *
 from midi import *
 from presets import *
@@ -24,13 +23,10 @@ while bootCheck < 4:
     bootCheck+=1
 
 # LCD Setup
-i2c = I2C(1, sda=Pin(2), scl=Pin(3), freq=400000)
-I2C_ADDR = i2c.scan()[0]
-lcd = I2cLcd(i2c, I2C_ADDR, 2, 16)
-lcd.blink_cursor_off()
-lcd.clear()
-lcd.hide_cursor()
-lcd.backlight_on()
+# i2c setup, higher frequency for display refresh
+i2c = busio.I2C(board.GP1, board.GP0, frequency=1000000)
+#  i2c display setup
+display_bus = displayio.I2CDisplay(i2c, device_address=0x3D)
 
 
 # Boot Screen
