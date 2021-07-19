@@ -5,6 +5,7 @@ from lcd_driver import I2cLcd
 from effects import *
 from midi import *
 from presets import *
+from ui import *
 
 def shutdown (time):
     sleep(time)
@@ -12,7 +13,7 @@ def shutdown (time):
     print("off")
     lcd.clear()
     sys.exit()
-
+    
 # Blink LED to confirm Sucessful Boot
 activeLED = Pin(25, Pin.OUT)
 bootCheck = 0
@@ -32,28 +33,8 @@ lcd.clear()
 lcd.hide_cursor()
 lcd.backlight_on()
 
-# Footswitch Pin Exaple
-"""
-FS0 = Pin(3, Pin.IN, Pin.PULL_DOWN)
-
-x = 0
-y = 0
-lcd.clear()
-lcd.putstr(str(x))
-FS0Last = 0
-while True:
-    print("Pin State", FS0.value(), "Loop", y)
-    if (FS0Last != FS0.value()) & (FS0.value() == 0):
-        x += 1
-        lcd.clear()
-        lcd.putstr(str(x))
-    FS0Last = FS0.value()
-    sleep_ms(25)
-    y+=1
-"""
 
 # Boot Screen
-#           --------------------
 lcd.putstr("      Midi  Pi      ")
 lcd.putstr(" Please set effects ")
 lcd.putstr(" to default values  ")
@@ -85,13 +66,14 @@ if str(settings) == "{}":
 # Import Presets & Settings
 songs = []
 actions = []
+mode = settings["mode"]
 if settings["firstSetup"] == True:
     lcd.clear()
     lcd.putstr("                    ")
     lcd.putstr("    Please Setup    ")
     shutdown(8)
 for i in settings["songs"]:
-    songs.append(Song(i["name"], i["shortName"], i["sshortName"], i["bpm"], i["PC"]))
+    songs.append(Song(i["name"], i["shortName"], i["sshortName"], i["bpm"], i["key"], i["PC"]))
 lcd.putstr("#")
 
 # Import Effects
@@ -101,62 +83,28 @@ lcd.putstr("#")
 
 # Import Footswitches
 x = 0
-for i in settings["footSwitchesEffects"]:
-    FootSwitches[x].setEffect(effects[i["effect"]].toggle(), effects[i["holdEffect"]].toggle(), effects[i["upEffect"]].toggle(), effects[i["rightEffect"]].toggle())
+for i in settings["FSAction"]:
+    FootSwitches[x].setAction(actions[i["action"]].toggle(), actions[i["holdAction"]].toggle())
     x = x + 1
 lcd.putstr("#")
 
-if settings["mode"] == "Stomp":
-    for i in FootSwitches:
-        i.setMode(0)
+# Setup Custom Chars
+lcd.custom_char(0, bytearray([0x00, 0x04, 0x08, 0x1F, 0x08, 0x04, 0x00, 0x00])) # Prev
+lcd.custom_char(1, bytearray([0x00, 0x04, 0x02, 0x1F, 0x02, 0x04, 0x00, 0x00])) # Next
+lcd.custom_char(2, bytearray([0x00, 0x0E, 0x0A, 0x0E, 0x04, 0x06, 0x06, 0x00]))
 lcd.putstr("#")
 
 lcd.move_to(10, 3)
 lcd.putstr("Done!     ")
 
-lcd.clear()
+currentSongNo = settings["currentSong"]
 
 # Main Loop
-currentSongNo = settings["currentSong"]
-def songLine(line):
-    if line == 0:
-        songName = songs[currentSongNo].name
-        if len(songName) >= 11: songName = songs[currentSongNo].shortName
-        if len(songName) >= 11: songName = songName[:11]
-        while len(songName) < 11:
-            songName = songName + " "
-        if len(str(songs[currentSongNo].bpm)) == 3: return songName + " BPM: " + str(songs[currentSongNo].bpm)
-        elif len(str(songs[currentSongNo].bpm)) == 2: return songName + " BPM:  " + str(songs[currentSongNo].bpm)
-    elif (line == 1) and (currentSongNo != 0):
-        songName = songs[currentSongNo-1].name
-        if len(songName) >= 5: songName = songs[currentSongNo-1].shortName
-        if len(songName) >= 5: songName = songName[:5]
-        while len(songName) < 5:
-            songName = songName + " "
-        if len(str(songs[currentSongNo].bpm)) == 3: return "Prev: " + songName + " BPM: " + str(songs[currentSongNo].bpm)
-        elif len(str(songs[currentSongNo].bpm)) == 2: return "Prev: " + songName + " BPM:  " + str(songs[currentSongNo].bpm)
-    elif (line == 1): return "  No Previous Song  "
-    elif (line == 2):
-        try:
-            songName = songs[currentSongNo+1].name
-            if len(songName) >= 5: songName = songs[currentSongNo+1].shortName
-            if len(songName) >= 5: songName = songName[:5]
-            while len(songName) < 5:
-                songName = songName + " "
-            if len(str(songs[currentSongNo].bpm)) == 3: return "Next: " + songName + " BPM: " + str(songs[currentSongNo].bpm)
-            elif len(str(songs[currentSongNo].bpm)) == 2: return "Next: " + songName + " BPM:  " + str(songs[currentSongNo].bpm)
-        except IndexError: return "    No Next Song    "
-    else:
-        out = "Mode: " + settings["mode"]
-        while len(out) <= 11:
-            out = out + " "
-        out = out + " Midi Pi"
-        return out
+lcd.putstr(line0(songs[currentSongNo], "Both"))
+lcd.putstr(line1(songs[int(currentSongNo-1)], "Both"))
+lcd.putstr(line2(songs[int(currentSongNo+1)], "Both"))
+lcd.putstr(line3(mode))
 
-lcd.putstr(songLine(0))
-lcd.putstr(songLine(1))
-lcd.putstr(songLine(2))
-lcd.putstr(songLine(3))
 x = 0
 while x <= 1:
     FSin = checkFS(FootSwitches, 3)
@@ -166,4 +114,4 @@ while x <= 1:
         lcd.putstr("input")
     x = x + 1
 
-shutdown(0)
+shutdown(10)

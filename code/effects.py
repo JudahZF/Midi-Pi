@@ -18,6 +18,8 @@ class action ():
             midi.sendCC(self.program, self.value)
         elif self.type == 2:
             midi.sendPC(self.program)
+        elif self.type == 3:
+            midi.sendPC(self.program)
         elif self.type == 9:
             print(self.program)
             

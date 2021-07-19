@@ -1,14 +1,31 @@
 {
     "firstSetup": false,
     "mode": "Stomp",
-    "currentSong": 0,
+    "currentSong": 1,
     "songs": [
         {
             "name": "Lion & The Lamb",
             "shortName": "Lion & Lamb",
             "sshortName": "L&TL",
+            "key": "A"
             "bpm": 90,
             "PC": 0
+        },
+        {
+            "name": "Let Go",
+            "shortName": "Let Go",
+            "sshortName": "LG",
+            "key": "C"
+            "bpm": 126,
+            "PC": 1
+        },
+        {
+            "name": "This Is A Song",
+            "shortName": "A Song",
+            "sshortName": "TAS",
+            "key": "C#"
+            "bpm": 126,
+            "PC": 1
         }
     ],
     "actions": [
@@ -19,12 +36,10 @@
             "value": 127
         }
     ],
-    "footSwitchesEffects": [
+    "FSAction": [
         {
-            "effect": 0,
-            "holdEffect": 0,
-            "upEffect": 0,
-            "rightEffect": 0
+            "action": 0,
+            "holdAction": 0
         }
     ]
 }
