@@ -35,10 +35,11 @@ def sendCC(program, value):
 def sendPC(program):
     midi.send(ProgramChange(program))
 
-def checkSong():
+def checkSong(CurrentSong):
     midiIn = midi.receive()
     try:
         songNo = midiIn.note
     except Exception as e:
         error = e
+        songNo = CurrentSong
     return songNo

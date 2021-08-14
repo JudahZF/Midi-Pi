@@ -116,7 +116,7 @@ lcd.set_cursor_pos(3, 10)
 lcd.print("Done!     ")
 
 currentSongNo = settings["currentSong"]
-
+songNo = 0
 # Main Loop
 def PrintGui (l3Mode, FSLine, DeviceMode):
     if DeviceMode == "Stomp":
@@ -127,7 +127,7 @@ def PrintGui (l3Mode, FSLine, DeviceMode):
     elif DeviceMode == "Live":
         lcd.print(ui.line0(set, "Live"))
         lcd.print(ui.line1(midiHost, "Live"))
-        lcd.print(ui.line2(songs[int(currentSongNo + 1)], "Both"))
+        lcd.print(ui.line2(songs[int(songNo)], "Live"))
         lcd.print(ui.line3(mode, l3Mode, FSLine))
 
 print(time.monotonic())
@@ -137,7 +137,8 @@ timeSincePress = 0
 while True:
     FSin = FX.checkFS(FootSwitches, 0.5)
     time.sleep(0.01)
-    print(midi.checkSong())
+    songNo = midi.checkSong(currentSongNo)
+    currentSongNo = songNo
     if FSin[0] is False:
         timeSincePress = time.monotonic() - timePress
         if timeSincePress == 14400000:
