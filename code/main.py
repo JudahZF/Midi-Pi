@@ -137,6 +137,7 @@ timeSincePress = 0
 while True:
     FSin = FX.checkFS(FootSwitches, 0.5)
     time.sleep(0.01)
+    print(midi.checkSong())
     if FSin[0] is False:
         timeSincePress = time.monotonic() - timePress
         if timeSincePress == 14400000:
