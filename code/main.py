@@ -9,19 +9,13 @@ import usb_midi
 import ui
 import midi
 import board
+from log import Log0 as Log
 from lcd.lcd import LCD
 from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 from lcd.lcd import CursorMode
 
 lcd = LCD(I2CPCF8574Interface(busio.I2C(scl=board.GP3, sda=board.GP2), 0x27))
 lcd.set_cursor_mode(CursorMode.HIDE)
-
-def shutdown(wait):
-    time.sleep(wait)
-    lcd.set_backlight(False)
-    print("off")
-    lcd.clear()
-    sys.exit()
 
 # Blink LED to confirm Sucessful Boot
 activeLED = digitalio.DigitalInOut(board.GP25)
@@ -72,6 +66,14 @@ if str(settings) == "{}":
     settings = json.load(file)
     file.close()
 
+Log.log("Imported JSON")
+
+def shutdown(wait):
+    time.sleep(wait)
+    lcd.set_backlight(False)
+    Log.log("Shutdown")
+    lcd.clear()
+    sys.exit()
 
 # Import Presets & Settings
 songs = []
@@ -83,17 +85,21 @@ if (settings["firstSetup"] is True):
     lcd.clear()
     lcd.print("                    ")
     lcd.print("    Please Setup    ")
+    Log.log("SYSTEM NOT SETUP")
     shutdown(8)
 for i in settings["songs"]:
     songs.append(
         presets.Song(i["name"], i["sName"], i["ssName"], i["bpm"], i["key"], i["PC"])
     )
+    Log.log(("Adding Song: " + i["name"]))
 lcd.print("#")
 
 # Import Effects
 for i in settings["actions"]:
     actions.append(FX.action(i["name"], i["type"], i["program"], i["value"], False))
-midi.setupMidi(settings["midiHost"])
+    Log.log(("Action Action: " + i["name"]))
+midi.setupMidi(midiHost)
+Log.log(("Set Up Midi: " + midiHost))
 lcd.print("#")
 
 # Import Footswitches
@@ -102,14 +108,15 @@ for i in settings["FSAction"]:
     FootSwitches[x].setAction(
         actions[i["action"]], actions[i["holdAction"]]
     )
-    print(str(FootSwitches[x].tapAction))
     x = x + 1
+Log.log(("Set Up Footswitches"))
 lcd.print("#")
 
 # Setup Custom Chars
 lcd.create_char(0, bytearray([0x00, 0x04, 0x08, 0x1F, 0x08, 0x04, 0x00, 0x00]))  # Prev
 lcd.create_char(1, bytearray([0x00, 0x04, 0x02, 0x1F, 0x02, 0x04, 0x00, 0x00]))  # Next
 lcd.create_char(2, bytearray([0x00, 0x0E, 0x0A, 0x0E, 0x04, 0x06, 0x06, 0x00]))  # Key
+Log.log(("Set Up Custom Characters"))
 lcd.print("#")
 
 lcd.set_cursor_pos(3, 10)
@@ -130,14 +137,21 @@ def PrintGui (l3Mode, FSLine, DeviceMode):
         lcd.print(ui.line2(songs[int(songNo)], "Live"))
         lcd.print(ui.line3(mode, l3Mode, FSLine))
 
-print(time.monotonic())
 PrintGui("clear", "Nothing Here", mode)
+Log.log("Main UI Printed")
 timePress = 0
 timeSincePress = 0
 cleared = True
 while True:
     FSin = FX.checkFS(FootSwitches, 0.5)
     songNo = midi.checkSong(currentSongNo)
+    if songNo is not currentSongNo:
+        try:
+            lcd.home()
+            PrintGui("clear", (FSin[1]), mode)
+            currentSongNo = songNo
+        except Exception as e:
+            Log.log(("Change Song Error: " + str(e)))
     currentSongNo = songNo
     if FSin[0] is False:
         timeSincePress = time.monotonic() - timePress
@@ -145,10 +159,12 @@ while True:
             shutdown(10)
         if (timeSincePress >= 5) and (cleared == False):
             PrintGui("clear", "Nerds", mode)
+            Log.log("Cleared GUI")
             cleared = True
         pass
     elif FSin[0] is True:
         timePress = time.monotonic()
+        Log.log(str("FS " + FSin[1] + " Pressed"))
         timeSincePress = 0
         lcd.home()
         cleared = False
