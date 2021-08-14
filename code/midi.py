@@ -15,7 +15,7 @@ def setupMidi(mode):
         uart = busio.UART(board.GP1, board.GP0, baudrate=31250, timeout=0.001)  # init UART
         midi_in_channel = 2
         midi_out_channel = 1
-        midi0 = adafruit_midi.MIDI(
+        midi = adafruit_midi.MIDI(
             midi_in=uart,
             midi_out=uart,
             in_channel=(midi_in_channel - 1),
@@ -30,3 +30,7 @@ def sendCC(program, value):
 
 def sendPC(program):
     midi.send(ProgramChange(program))
+
+def checkSong():
+    songNo = midi.receive()
+    return songNo

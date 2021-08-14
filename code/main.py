@@ -78,6 +78,7 @@ songs = []
 actions = []
 mode = settings["mode"]
 set = settings["Set Name"]
+midiHost = settings["midiHost"]
 if (settings["firstSetup"] is True):
     lcd.clear()
     lcd.print("                    ")
@@ -125,12 +126,12 @@ def PrintGui (l3Mode, FSLine, DeviceMode):
         lcd.print(ui.line3(mode, l3Mode, FSLine))
     elif DeviceMode == "Live":
         lcd.print(ui.line0(set, "Live"))
-        lcd.print(ui.line1(songs[int(currentSongNo - 1)], "Both"))
+        lcd.print(ui.line1(midiHost, "Live"))
         lcd.print(ui.line2(songs[int(currentSongNo + 1)], "Both"))
         lcd.print(ui.line3(mode, l3Mode, FSLine))
 
 print(time.monotonic())
-PrintGui("init", "Nothing Here", mode)
+PrintGui("clear", "Nothing Here", mode)
 timePress = 0
 timeSincePress = 0
 while True:
@@ -140,6 +141,8 @@ while True:
         timeSincePress = time.monotonic() - timePress
         if timeSincePress == 14400000:
             shutdown(10)
+        if timeSincePress <= 60000:
+            PrintGui("clear", "Nerds", mode)
         pass
     elif FSin[0] is True:
         timePress = time.monotonic()

@@ -73,32 +73,36 @@ def line1(text, displayMode):
         line = addBPM(text, line)
         return line
     elif displayMode == "Live":
-        line = text
+        line = "Midi Mode: " + text[:9]
         return line
 
 
-def line2(song, displayMode):
+def line2(text, displayMode):
     if displayMode == "BPM":
-        songName = shortenName(song, 9)
+        songName = shortenName(text, 9)
         line = chr(1) + " " + songName
-        line = addBPM(song, line)
+        line = addBPM(text, line)
         return line
     elif displayMode == "Key":
-        songName = shortenName(song, 10)
+        songName = shortenName(text, 10)
         line = chr(1) + " " + songName
-        line = addKey(song, line)
+        line = addKey(text, line)
         return line
     elif displayMode == "Both":
-        songName = shortenName(song, 7)
+        songName = shortenName(text, 7)
         line = chr(1) + " " + songName
-        line = addKey(song, line)
-        line = addBPM(song, line)
+        line = addKey(text, line)
+        line = addBPM(text, line)
         return line
+    elif displayMode == "Live":
+        line = "Current Track: " + shortenName(text, 5)
+        return line
+
 
 
 def line3(mode, displayMode, FSLine):
     line = ""
-    if displayMode == "init":
+    if displayMode == "clear":
         line = "Mode:" + mode
         while 11 >= len(line):
             line = line + " "
