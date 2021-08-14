@@ -55,22 +55,25 @@ def line0(text, displayMode):
         return line
 
 
-def line1(song, displayMode):
+def line1(text, displayMode):
     if displayMode == "BPM":
-        songName = shortenName(song, 9)
+        songName = shortenName(text, 9)
         line = chr(0) + " " + songName
-        line = addBPM(song, line)
+        line = addBPM(text, line)
         return line
     elif displayMode == "Key":
-        songName = shortenName(song, 10)
+        songName = shortenName(text, 10)
         line = chr(0) + " " + songName
-        line = addKey(song, line)
+        line = addKey(text, line)
         return line
     elif displayMode == "Both":
-        songName = shortenName(song, 7)
+        songName = shortenName(text, 7)
         line = chr(0) + " " + songName
-        line = addKey(song, line)
-        line = addBPM(song, line)
+        line = addKey(text, line)
+        line = addBPM(text, line)
+        return line
+    elif displayMode == "Live":
+        line = text
         return line
 
 

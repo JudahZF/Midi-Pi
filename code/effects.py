@@ -1,8 +1,6 @@
 import midi
 import time
 import digitalio
-from adafruit_debouncer import Debouncer
-
 
 
 def shutdown(wait):
