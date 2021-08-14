@@ -74,7 +74,7 @@ def line1(text, displayMode):
         return line
     elif displayMode == "Live":
         line = "Midi Mode: " + text[:9]
-        while 20 >= len(line):
+        while 20 > len(line):
             line = line + " "
         return line
 
@@ -97,8 +97,8 @@ def line2(text, displayMode):
         line = addBPM(text, line)
         return line
     elif displayMode == "Live":
-        line = "Current Track: " + shortenName(text, 5)
-        while 20 >= len(line):
+        line = "Track: " + shortenName(text, 13)
+        while 20 > len(line):
             line = line + " "
         return line
 

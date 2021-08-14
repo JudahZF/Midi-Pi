@@ -116,7 +116,7 @@ lcd.set_cursor_pos(3, 10)
 lcd.print("Done!     ")
 
 currentSongNo = settings["currentSong"]
-songNo = 0
+songNo = currentSongNo
 # Main Loop
 def PrintGui (l3Mode, FSLine, DeviceMode):
     if DeviceMode == "Stomp":
@@ -134,22 +134,24 @@ print(time.monotonic())
 PrintGui("clear", "Nothing Here", mode)
 timePress = 0
 timeSincePress = 0
+cleared = True
 while True:
     FSin = FX.checkFS(FootSwitches, 0.5)
-    time.sleep(0.01)
     songNo = midi.checkSong(currentSongNo)
     currentSongNo = songNo
     if FSin[0] is False:
         timeSincePress = time.monotonic() - timePress
-        if timeSincePress == 14400000:
+        if timeSincePress == 21600:
             shutdown(10)
-        if timeSincePress <= 60000:
+        if (timeSincePress >= 5) and (cleared == False):
             PrintGui("clear", "Nerds", mode)
+            cleared = True
         pass
     elif FSin[0] is True:
         timePress = time.monotonic()
         timeSincePress = 0
         lcd.home()
+        cleared = False
         PrintGui("loop", (FSin[1]), mode)
 
 
