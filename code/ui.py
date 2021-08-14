@@ -28,22 +28,30 @@ def shortenName(song, length):
     return songName
 
 
-def line0(song, displayMode):
+def line0(text, displayMode):
     if displayMode == "BPM":
-        songName = shortenName(song, 11)
+        songName = shortenName(text, 11)
         line = songName
-        line = addBPM(song, line)
+        line = addBPM(text, line)
         return line
     elif displayMode == "Key":
-        songName = shortenName(song, 12)
+        songName = shortenName(text, 12)
         line = songName
-        line = addKey(song, line)
+        line = addKey(text, line)
         return line
     elif displayMode == "Both":
-        songName = shortenName(song, 9)
+        songName = shortenName(text, 9)
         line = songName
-        line = addKey(song, line)
-        line = addBPM(song, line)
+        line = addKey(text, line)
+        line = addBPM(text, line)
+        return line
+    elif displayMode == "Live":
+        setName = text[:20]
+        if len(setName) < 20:
+            setName = " " + setName
+        while len(setName) < 20:
+            setName = setName + " "
+        line = setName
         return line
 
 
@@ -85,9 +93,18 @@ def line2(song, displayMode):
         return line
 
 
-def line3(mode):
-    line = "Mode:" + mode
-    while 11 >= len(line):
-        line = line + " "
-    line = line + " Midi Pi"
+def line3(mode, displayMode, FSLine):
+    line = ""
+    if displayMode == "init":
+        line = "Mode:" + mode
+        while 11 >= len(line):
+            line = line + " "
+        line = line + " Midi Pi"
+    elif displayMode == "loop":
+        line = "Mode:" + mode[:1]
+        while 6 >= len(line):
+            line = line + " "
+        while 12 >= len(FSLine):
+           FSLine = " " + FSLine
+        line = line + FSLine
     return line

@@ -1,6 +1,7 @@
 {
     "firstSetup": false,
-    "mode": "Stomp",
+    "mode": "Live",
+    "Set Name": "Arun Youth Summer"
     "midiHost": "USB",
     "currentSong": 1,
     "songs": [
@@ -8,7 +9,7 @@
             "name": "Lion & The Lamb",
             "sName": "Lion & Lamb",
             "ssName": "L&TL",
-            "key": "A"
+            "key": "A",
             "bpm": 90,
             "PC": 0
         },
@@ -16,7 +17,7 @@
             "name": "Let Go",
             "sName": "Let Go",
             "ssName": "LG",
-            "key": "C"
+            "key": "C",
             "bpm": 126,
             "PC": 1
         },
@@ -24,23 +25,137 @@
             "name": "This Is A Song",
             "sName": "A Song",
             "ssName": "TAS",
-            "key": "C#"
+            "key": "C#",
             "bpm": 126,
             "PC": 1
         }
     ],
     "actions": [
         {
-            "name": "flange",
-            "type": 1,
-            "program": 64,
+            "name": "NULL",
+            "type": 8,
+            "program": 70,
+            "value": 127
+        },
+        {
+            "name": "Down",
+            "type": 0,
+            "program": 70,
+            "value": 127
+        },
+        {
+            "name": "Up",
+            "type": 0,
+            "program": 71,
+            "value": 127
+        },
+        {
+            "name": "Down Set",
+            "type": 0,
+            "program": 72,
+            "value": 127
+        },
+        {
+            "name": "Up Set",
+            "type": 0,
+            "program": 73,
+            "value": 127
+        },
+        {
+            "name": "Delay 0",
+            "type": 0,
+            "program": 74,
+            "value": 127
+        },
+        {
+            "name": "Delay 1",
+            "type": 0,
+            "program": 75,
+            "value": 127
+        },
+        {
+            "name": "Flange",
+            "type": 0,
+            "program": 76,
+            "value": 127
+        },
+        {
+            "name": "Chorus",
+            "type": 0,
+            "program": 77,
+            "value": 127
+        },
+        {
+            "name": "Trem",
+            "type": 0,
+            "program": 78,
+            "value": 127
+        },
+        {
+            "name": "Amp",
+            "type": 0,
+            "program": 79,
+            "value": 127
+        },
+        {
+            "name": "Swell",
+            "type": 0,
+            "program": 80,
+            "value": 127
+        },
+        {
+            "name": "Swell Delay",
+            "type": 0,
+            "program": 81,
+            "value": 127
+        },
+        {
+            "name": "Verb",
+            "type": 0,
+            "program": 82,
             "value": 127
         }
     ],
     "FSAction": [
         {
-            "action": 0,
+            "action": 7,
             "holdAction": 0
+        },
+        {
+            "action": 8,
+            "holdAction": 0
+        },
+        {
+            "action": 9,
+            "holdAction": 0
+        },
+        {
+            "action": 10,
+            "holdAction": 0
+        },
+        {
+            "action": 5,
+            "holdAction": 0
+        },
+        {
+            "action": 6,
+            "holdAction": 0
+        },
+        {
+            "action": 13,
+            "holdAction": 0
+        },
+        {
+            "action": 11,
+            "holdAction": 12
+        },
+        {
+            "action": 1,
+            "holdAction": 3
+        },
+        {
+            "action": 2,
+            "holdAction": 4
         }
     ]
 }

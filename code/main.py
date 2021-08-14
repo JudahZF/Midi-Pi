@@ -12,12 +12,13 @@ import board
 from lcd.lcd import LCD
 from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 from lcd.lcd import CursorMode
+
 lcd = LCD(I2CPCF8574Interface(busio.I2C(scl=board.GP3, sda=board.GP2), 0x27))
 lcd.set_cursor_mode(CursorMode.HIDE)
 
 def shutdown(wait):
     time.sleep(wait)
-    lcd.backlight_off()
+    lcd.set_backlight(False)
     print("off")
     lcd.clear()
     sys.exit()
@@ -41,16 +42,16 @@ lcd.print(" Booting: ")
 
 # Define Footswitches 6-15
 FootSwitches = [
-    FX.footSwitch(0, board.GP6),
-    FX.footSwitch(1, board.GP7),
-    FX.footSwitch(2, board.GP8),
-    FX.footSwitch(3, board.GP9),
-    FX.footSwitch(4, board.GP10),
-    FX.footSwitch(5, board.GP11),
-    FX.footSwitch(6, board.GP12),
-    FX.footSwitch(7, board.GP13),
-    FX.footSwitch(8, board.GP14),
-    FX.footSwitch(9, board.GP15),
+    FX.footSwitch(0, board.GP4),
+    FX.footSwitch(1, board.GP5),
+    FX.footSwitch(2, board.GP6),
+    FX.footSwitch(3, board.GP7),
+    FX.footSwitch(4, board.GP8),
+    FX.footSwitch(5, board.GP9),
+    FX.footSwitch(6, board.GP10),
+    FX.footSwitch(7, board.GP11),
+    FX.footSwitch(8, board.GP12),
+    FX.footSwitch(9, board.GP13),
 ]
 lcd.print("#")
 # Load JSON
@@ -76,6 +77,7 @@ if str(settings) == "{}":
 songs = []
 actions = []
 mode = settings["mode"]
+set = settings["Set Name"]
 if (settings["firstSetup"] is True):
     lcd.clear()
     lcd.print("                    ")
@@ -97,8 +99,9 @@ lcd.print("#")
 x = 0
 for i in settings["FSAction"]:
     FootSwitches[x].setAction(
-        actions[i["action"]].toggle(), actions[i["holdAction"]].toggle()
+        actions[i["action"]], actions[i["holdAction"]]
     )
+    print(str(FootSwitches[x].tapAction))
     x = x + 1
 lcd.print("#")
 
@@ -114,27 +117,38 @@ lcd.print("Done!     ")
 currentSongNo = settings["currentSong"]
 
 # Main Loop
-lcd.print(ui.line0(songs[currentSongNo], "Both"))
-lcd.print(ui.line1(songs[int(currentSongNo - 1)], "Both"))
-lcd.print(ui.line2(songs[int(currentSongNo + 1)], "Both"))
-lcd.print(ui.line3(mode))
+def PrintGui (l3Mode, FSLine, DeviceMode):
+    if DeviceMode == "Stomp":
+        lcd.print(ui.line0(songs[currentSongNo], "Both"))
+        lcd.print(ui.line1(songs[int(currentSongNo - 1)], "Both"))
+        lcd.print(ui.line2(songs[int(currentSongNo + 1)], "Both"))
+        lcd.print(ui.line3(mode, l3Mode, FSLine))
+    elif DeviceMode == "Live":
+        lcd.print(ui.line0(set, "Live"))
+        lcd.print(ui.line1(songs[int(currentSongNo - 1)], "Both"))
+        lcd.print(ui.line2(songs[int(currentSongNo + 1)], "Both"))
+        lcd.print(ui.line3(mode, l3Mode, FSLine))
 
-print("Sending CC")
-midi.sendCC(1, 0)
-print("CC Sent")
-
-print("Sending PC")
-midi.sendPC(1)
-print("PC Sent")
-
-x = 0
-while x <= 1:
-    FSin = FX.checkFS(FootSwitches, 3)
-    if FSin is False:
+print(time.monotonic())
+PrintGui("init", "Nothing Here", mode)
+timePress = 0
+timeSincePress = 0
+while True:
+    FSin = FX.checkFS(FootSwitches, 0.5)
+    time.sleep(0.01)
+    if FSin[0] is False:
+        timeSincePress = time.monotonic() - timePress
+        if timeSincePress == 14400000:
+            shutdown(10)
         pass
-    elif FSin is True:
-        lcd.clear()
-        lcd.putstr("input")
-    x = x + 1
+    elif FSin[0] is True:
+        timePress = time.monotonic()
+        timeSincePress = 0
+        lcd.home()
+        PrintGui("loop", (FSin[1]), mode)
 
-#shutdown(10)
+
+
+# Shutdown
+"""if FSin[2] == 0:
+    shutdown(8)"""
