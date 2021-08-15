@@ -20,10 +20,9 @@ midi0 = adafruit_midi.MIDI(
     debug=False,
     )
 
-midi1 = adafruit_midi.MIDI(midi_out=usb_midi.ports[1],midi_in=usb_midi.ports[0], out_channel=0, in_channel=1)
+midi1 = adafruit_midi.MIDI(midi_out=usb_midi.ports[1],midi_in=usb_midi.ports[0], out_channel=0, in_channel=4)
 midi = midi1
 def setupMidi(mode):
-    print(usb_midi)
     if mode == "MIDI":
         midi = midi0
     elif mode == "USB":
@@ -36,10 +35,11 @@ def sendPC(program):
     midi.send(ProgramChange(program))
 
 def checkSong(CurrentSong):
+    songNo = CurrentSong
     midiIn = midi.receive()
     try:
-        songNo = midiIn.note
-    except Exception as e:
-        error = e
-        songNo = CurrentSong
+        if midiIn.control is 3: 
+            songNo = midiIn.value
+    except Exception:
+                songNo = CurrentSong    
     return songNo

@@ -6,14 +6,6 @@
     "currentSong": 1,
     "songs": [
         {
-            "name": "Lion & The Lamb",
-            "sName": "Lion & Lamb",
-            "ssName": "L&TL",
-            "key": "A",
-            "bpm": 90,
-            "PC": 0
-        },
-        {
             "name": "Let Go",
             "sName": "Let Go",
             "ssName": "LG",
@@ -22,11 +14,91 @@
             "PC": 1
         },
         {
-            "name": "This Is A Song",
-            "sName": "A Song",
-            "ssName": "TAS",
-            "key": "C#",
-            "bpm": 126,
+            "name": "Phenomena",
+            "sName": "Pheno",
+            "ssName": "Ph",
+            "key": "F#",
+            "bpm": 132,
+            "PC": 1
+        },
+        {
+            "name": "Best Friends",
+            "sName": "Bet Freds",
+            "ssName": "BF",
+            "key": "Bb#",
+            "bpm": 75,
+            "PC": 1
+        },
+        {
+            "name": "You Are The One Thing",
+            "sName": "UR One Thing",
+            "ssName": "YATOT",
+            "key": "E",
+            "bpm": 146,
+            "PC": 1
+        },
+        {
+            "name": "This is Living",
+            "sName": "Living",
+            "ssName": "TIL",
+            "key": "D",
+            "bpm": 128,
+            "PC": 1
+        },
+        {
+            "name": "Never Have I Ever",
+            "sName": "Nvr Hv I Evr",
+            "ssName": "NHIE",
+            "key": "C",
+            "bpm": 72,
+            "PC": 1
+        },
+        {
+            "name": "Do It Again",
+            "sName": "DI Again",
+            "ssName": "DIA",
+            "key": "Bb",
+            "bpm": 86,
+            "PC": 1
+        },
+        {
+            "name": "Here Again",
+            "sName": "H Again",
+            "ssName": "HA",
+            "key": "D",
+            "bpm": 68,
+            "PC": 1
+        },
+        {
+            "name": "As You Find Me",
+            "sName": "U Fnd Me",
+            "ssName": "AYFM",
+            "key": "D",
+            "bpm": 66,
+            "PC": 1
+        },
+        {
+            "name": "Awake My Soul",
+            "sName": "Awake Soul",
+            "ssName": "AMS",
+            "key": "F",
+            "bpm": 127,
+            "PC": 1
+        },
+        {
+            "name": "Phenomena",
+            "sName": "Pheno",
+            "ssName": "Ph",
+            "key": "F#",
+            "bpm": 132,
+            "PC": 1
+        },
+        {
+            "name": "Phenomena",
+            "sName": "Pheno",
+            "ssName": "Ph",
+            "key": "F#",
+            "bpm": 132,
             "PC": 1
         }
     ],

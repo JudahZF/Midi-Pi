@@ -72,7 +72,7 @@ log("Imported JSON")
 def shutdown(wait):
     time.sleep(wait)
     lcd.set_backlight(False)
-    Log.log(str("Shutdown"))
+    log(str("Shutdown"))
     lcd.clear()
     sys.exit()
 
@@ -160,7 +160,7 @@ while True:
             shutdown(10)
         if (timeSincePress >= 5) and (cleared == False):
             PrintGui("clear", "Nerds", mode)
-            g.log(str("Cleared GUI"))
+            log(str("Cleared GUI"))
             cleared = True
         pass
     elif FSin[0] is True:
