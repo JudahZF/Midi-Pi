@@ -19,3 +19,7 @@ Finally open settings.json and edit the config as needed
   - [x] Live
   - [ ] Song
   - [ ] Edit
+
+## Version Branches:
+Each larger version of the software has its only branch, when making or suggesting changes use that branch.
+The main branch will always be the latest release.
