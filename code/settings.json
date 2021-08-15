@@ -61,15 +61,15 @@
         },
         {
             "action": 0,
-            "holdAction": 12
+            "holdAction": 0
         },
         {
             "action": 0,
-            "holdAction": 3
+            "holdAction": 0
         },
         {
             "action": 0,
-            "holdAction": 4
+            "holdAction": 0
         }
     ]
 }
