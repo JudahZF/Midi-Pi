@@ -2,14 +2,6 @@ import midi
 import time
 import digitalio
 
-
-def shutdown(wait):
-    time.sleep(wait)
-    lcd.backlight_off()
-    print("off")
-    lcd.clear()
-    sys.exit()
-
 class action:
     def __init__(self, name, typeNo, program, value, state):
         self.name = name
@@ -18,6 +10,7 @@ class action:
         self.value = value
         self.state = state
 
+    # Toogle The Footswitch
     def toggle(self):
         if self.type == 0:
             midi.sendCC(self.program, self.value)
@@ -46,6 +39,7 @@ class footSwitch:
         self.tapAction = self.tapAction
         self.holdAction = self.holdAction
 
+    # Set The actions of the Footswitch
     def setAction(self, action, holdAction):
         self.tapAction = action
         self.holdAction = holdAction
@@ -72,12 +66,17 @@ def checkFS(FS, Htime):
     held = ""
     no = 0
     for i in FS:
+        # Check For pressed Footswitch
         if i.IO.value is True:
             no = x
+            # Save Start Time
             start_time = time.monotonic()
             while i.IO.value is True:
+                # Wait
                 pass
+            # Save End Time
             holdTime = time.monotonic() - start_time
+            # Decide whether to hold or tap footswitch
             if holdTime >= Htime:
                 i.hold()
                 held = ("FS " + str(x) + " Held")
@@ -85,6 +84,5 @@ def checkFS(FS, Htime):
                 i.tap()
                 held = ("FS " + str(x) + " Tapped")
             tapped = True
-
         else: x = x + 1
     return [tapped, held, no]
