@@ -8,14 +8,14 @@ Finally open settings.json and edit the config as needed
 
 ## To Do
 
-- [ ] Program Foot Switches
-  - [ ] Tap
-  - [ ] Hold
-  - [ ] Dual Switch Tap
+- [x] Program Foot Switches
+  - [x] Tap
+  - [x] Hold
 - [x] Program MIDI Interface
 - [x] Program UI
 - [ ] Program Editor
 - [ ] Program Modes:
   - [x] Stomp
+  - [x] Live
   - [ ] Song
   - [ ] Edit
