@@ -6,19 +6,15 @@ First flash your Pico Pi with (Circuit Python)[https://circuitpython.org/board/r
 Then download the latest release and copy it to the Circuit Python drive.
 Finally open settings.json and edit the config as needed
 
-## To Do
-
-- [x] Program Foot Switches
-  - [x] Tap
-  - [x] Hold
-- [x] Program MIDI Interface
-- [x] Program UI
-- [ ] Program Editor
-- [ ] Program Modes:
+## Features
+### Current Version: 1.0
+- [ ] Editor
+- Modes:
   - [x] Stomp
   - [x] Live
   - [ ] Song
   - [ ] Edit
+- [x] Know what song is being played via Midi CC
 
 ## Version Branches:
 Each larger version of the software has its only branch, when making or suggesting changes use that branch.
