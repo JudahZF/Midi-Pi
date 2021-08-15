@@ -1,5 +1,5 @@
 {
-    "firstSetup": True,
+    "firstSetup": true,
     "mode": "Live",
     "Set Name": "Name A Set Here",
     "midiHost": "USB",
