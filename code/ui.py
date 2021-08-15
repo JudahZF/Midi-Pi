@@ -1,3 +1,4 @@
+# Add BPM to end of string
 def addBPM(song, line):
     if len(str(song.bpm)) == 2:
         line = line + " T: " + str(song.bpm)
@@ -5,7 +6,7 @@ def addBPM(song, line):
         line = line + " T:" + str(song.bpm)
     return line
 
-
+# Add Key to end of string
 def addKey(song, line):
     if len(str(song.key)) == 1:
         line = line + " " + chr(2) + ":" + str(song.key) + " "
@@ -13,7 +14,7 @@ def addKey(song, line):
         line = line + " " + chr(2) + ":" + str(song.key)
     return line
 
-
+# Shorten Song Name
 def shortenName(song, length):
     leng = length
     songName = song.name
@@ -27,6 +28,8 @@ def shortenName(song, length):
         songName = songName + " "
     return songName
 
+
+# Function for Generating each line on the LCD (for 20x4 display)
 
 def line0(text, displayMode):
     if displayMode == "BPM":
@@ -54,7 +57,6 @@ def line0(text, displayMode):
         line = setName
         return line
 
-
 def line1(text, displayMode):
     if displayMode == "BPM":
         songName = shortenName(text, 9)
@@ -78,7 +80,6 @@ def line1(text, displayMode):
             line = line + " "
         return line
 
-
 def line2(text, displayMode):
     if displayMode == "BPM":
         songName = shortenName(text, 9)
@@ -101,8 +102,6 @@ def line2(text, displayMode):
         while 20 > len(line):
             line = line + " "
         return line
-
-
 
 def line3(mode, displayMode, FSLine):
     line = ""

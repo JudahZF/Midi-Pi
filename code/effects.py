@@ -2,14 +2,6 @@ import midi
 import time
 import digitalio
 
-
-def shutdown(wait):
-    time.sleep(wait)
-    lcd.backlight_off()
-    print("off")
-    lcd.clear()
-    sys.exit()
-
 class action:
     def __init__(self, name, typeNo, program, value, state):
         self.name = name

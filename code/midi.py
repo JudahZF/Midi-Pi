@@ -34,6 +34,7 @@ def sendCC(program, value):
 def sendPC(program):
     midi.send(ProgramChange(program))
 
+# Check CC 3 For SOng Change
 def checkSong(CurrentSong):
     songNo = CurrentSong
     midiIn = midi.receive()
