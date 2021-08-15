@@ -1,117 +1,176 @@
-from machine import *
-import ustruct, gc, utime, json, sys
-from time import *
-from lcd_driver import I2cLcd
-from effects import *
-from midi import *
-from presets import *
-from ui import *
+import json
+import sys
+import busio
+import time
+import digitalio
+import effects as FX
+import presets
+import usb_midi
+import ui
+import midi
+import board
+from log import log
+from lcd.lcd import LCD
+from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
+from lcd.lcd import CursorMode
 
-def shutdown (time):
-    sleep(time)
-    lcd.backlight_off()
-    print("off")
-    lcd.clear()
-    sys.exit()
-    
+lcd = LCD(I2CPCF8574Interface(busio.I2C(scl=board.GP3, sda=board.GP2), 0x27))
+lcd.set_cursor_mode(CursorMode.HIDE)
+
 # Blink LED to confirm Sucessful Boot
-activeLED = Pin(25, Pin.OUT)
+activeLED = digitalio.DigitalInOut(board.GP25)
+activeLED.direction = digitalio.Direction.OUTPUT
 bootCheck = 0
 while bootCheck < 4:
-    activeLED.toggle()
-    sleep_ms(100)
-    activeLED.toggle()
-    sleep_ms(100)
-    bootCheck+=1
-
-# LCD Setup
-i2c = I2C(1, sda=Pin(2), scl=Pin(3), freq=400000)
-I2C_ADDR = i2c.scan()[0]
-lcd = I2cLcd(i2c, I2C_ADDR, 2, 16)
-lcd.blink_cursor_off()
-lcd.clear()
-lcd.hide_cursor()
-lcd.backlight_on()
-
+    activeLED.value = True
+    time.sleep(0.100)
+    activeLED.value = False
+    time.sleep(0.100)
+    bootCheck += 1
 
 # Boot Screen
-lcd.putstr("      Midi  Pi      ")
-lcd.putstr(" Please set effects ")
-lcd.putstr(" to default values  ")
-lcd.putstr(" Booting: ")
+lcd.print("      Midi  Pi      ")
+lcd.print(" Please set effects ")
+lcd.print(" to default values  ")
+lcd.print(" Booting: ")
 
 # Define Footswitches 6-15
-FootSwitches = [footSwitch(0, 6), footSwitch(1, 7), footSwitch(2, 8), footSwitch(3, 9), footSwitch(4, 10), footSwitch(5, 11), footSwitch(6, 12), footSwitch(7, 13), footSwitch(8, 14), footSwitch(9, 15)]
-lcd.putchar("#")
+FootSwitches = [
+    FX.footSwitch(0, board.GP4),
+    FX.footSwitch(1, board.GP5),
+    FX.footSwitch(2, board.GP6),
+    FX.footSwitch(3, board.GP7),
+    FX.footSwitch(4, board.GP8),
+    FX.footSwitch(5, board.GP9),
+    FX.footSwitch(6, board.GP10),
+    FX.footSwitch(7, board.GP11),
+    FX.footSwitch(8, board.GP12),
+    FX.footSwitch(9, board.GP13),
+]
+lcd.print("#")
 
 # Load JSON
-file = open("settings.json", 'r')
+file = open("settings.json", "r")
 settings = json.load(file)
 file.close()
-lcd.putchar("#")
+lcd.print("#")
 print(settings)
 if str(settings) == "{}":
     print("empty JSON")
     x = {"firstSetup": True}
     settings = json.dumps(x)
     print(settings)
-    file = open("settings.json", 'w')
+    file = open("settings.json", "w")
     file.write(settings)
     file.close()
-    file = open("settings.json", 'r')
+    file = open("settings.json", "r")
     settings = json.load(file)
     file.close()
-    
+
+log("Imported JSON")
+
+def shutdown(wait):
+    time.sleep(wait)
+    lcd.set_backlight(False)
+    log(str("Shutdown"))
+    lcd.clear()
+    sys.exit()
 
 # Import Presets & Settings
 songs = []
 actions = []
 mode = settings["mode"]
-if settings["firstSetup"] == True:
+set = settings["Set Name"]
+midiHost = settings["midiHost"]
+if (settings["firstSetup"] is True):
     lcd.clear()
-    lcd.putstr("                    ")
-    lcd.putstr("    Please Setup    ")
+    lcd.print("                    ")
+    lcd.print("    Please Setup    ")
+    log("SYSTEM NOT SETUP")
     shutdown(8)
 for i in settings["songs"]:
-    songs.append(Song(i["name"], i["shortName"], i["sshortName"], i["bpm"], i["key"], i["PC"]))
-lcd.putstr("#")
+    songs.append(
+        presets.Song(i["name"], i["sName"], i["ssName"], i["bpm"], i["key"], i["PC"])
+    )
+    log(str("Adding Song: " + i["name"]))
+lcd.print("#")
 
 # Import Effects
 for i in settings["actions"]:
-    actions.append(action(i["name"], i["type"], i["program"], i["value"]))
-lcd.putstr("#")
+    actions.append(FX.action(i["name"], i["type"], i["program"], i["value"], False))
+    log(str("Action Action: " + i["name"]))
+midi.setupMidi(midiHost)
+log(str("Set Up Midi: " + midiHost))
+lcd.print("#")
 
 # Import Footswitches
 x = 0
 for i in settings["FSAction"]:
-    FootSwitches[x].setAction(actions[i["action"]].toggle(), actions[i["holdAction"]].toggle())
+    FootSwitches[x].setAction(
+        actions[i["action"]], actions[i["holdAction"]]
+    )
     x = x + 1
-lcd.putstr("#")
+log(str("Set Up Footswitches"))
+lcd.print("#")
 
 # Setup Custom Chars
-lcd.custom_char(0, bytearray([0x00, 0x04, 0x08, 0x1F, 0x08, 0x04, 0x00, 0x00])) # Prev
-lcd.custom_char(1, bytearray([0x00, 0x04, 0x02, 0x1F, 0x02, 0x04, 0x00, 0x00])) # Next
-lcd.custom_char(2, bytearray([0x00, 0x0E, 0x0A, 0x0E, 0x04, 0x06, 0x06, 0x00]))
-lcd.putstr("#")
+lcd.create_char(0, bytearray([0x00, 0x04, 0x08, 0x1F, 0x08, 0x04, 0x00, 0x00]))  # Prev
+lcd.create_char(1, bytearray([0x00, 0x04, 0x02, 0x1F, 0x02, 0x04, 0x00, 0x00]))  # Next
+lcd.create_char(2, bytearray([0x00, 0x0E, 0x0A, 0x0E, 0x04, 0x06, 0x06, 0x00]))  # Key
+log(str("Set Up Custom Characters"))
+lcd.print("#")
 
-lcd.move_to(10, 3)
-lcd.putstr("Done!     ")
+lcd.set_cursor_pos(3, 10)
+lcd.print("Done!     ")
 
 currentSongNo = settings["currentSong"]
-
+songNo = currentSongNo
 # Main Loop
-lcd.putstr(line0(songs[currentSongNo], "Both"))
-lcd.putstr(line1(songs[int(currentSongNo-1)], "Both"))
-lcd.putstr(line2(songs[int(currentSongNo+1)], "Both"))
-lcd.putstr(line3(mode))
+def PrintGui (l3Mode, FSLine, DeviceMode):
+    if DeviceMode == "Stomp":
+        lcd.print(ui.line0(songs[currentSongNo], "Both"))
+        lcd.print(ui.line1(songs[int(currentSongNo - 1)], "Both"))
+        lcd.print(ui.line2(songs[int(currentSongNo + 1)], "Both"))
+        lcd.print(ui.line3(mode, l3Mode, FSLine))
+    elif DeviceMode == "Live":
+        lcd.print(ui.line0(set, "Live"))
+        lcd.print(ui.line1(midiHost, "Live"))
+        lcd.print(ui.line2(songs[int(songNo)], "Live"))
+        lcd.print(ui.line3(mode, l3Mode, FSLine))
 
-x = 0
-while x <= 1:
-    FSin = checkFS(FootSwitches, 3)
-    if FSin == False: pass
-    elif FSin == True:
-        lcd.clear()
-        lcd.putstr("input")
-    x = x + 1
+PrintGui("clear", "Nothing Here", mode)
+log(str("Main UI Printed"))
+timePress = 0
+timeSincePress = 0
+cleared = True
+while True:
+    FSin = FX.checkFS(FootSwitches, 0.5)
+    songNo = midi.checkSong(currentSongNo)
+    if songNo is not currentSongNo:
+        try:
+            lcd.home()
+            PrintGui("clear", (FSin[1]), mode)
+            currentSongNo = songNo
+        except Exception as e:
+            log(str("Change Song Error: " + str(e)))
+    currentSongNo = songNo
+    if FSin[0] is False:
+        timeSincePress = time.monotonic() - timePress
+        if timeSincePress == 21600:
+            shutdown(10)
+        if (timeSincePress >= 5) and (cleared == False):
+            PrintGui("clear", "Nerds", mode)
+            log(str("Cleared GUI"))
+            cleared = True
+        pass
+    elif FSin[0] is True:
+        timePress = time.monotonic()
+        log(str("FS " + FSin[1] + " Pressed"))
+        timeSincePress = 0
+        lcd.home()
+        cleared = False
+        PrintGui("loop", (FSin[1]), mode)
 
-shutdown(10)
+# Shutdown
+"""if FSin[2] == 0:
+    shutdown(8)"""
