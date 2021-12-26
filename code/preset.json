@@ -1,0 +1,230 @@
+{
+    "Set Name": "Arun Youth Summer",
+    "currentSong": 1,
+    "songs": [
+        {
+            "name": "Let Go",
+            "sName": "Let Go",
+            "ssName": "LG",
+            "key": "C",
+            "bpm": 126,
+            "PC": 1
+        },
+        {
+            "name": "Phenomena",
+            "sName": "Pheno",
+            "ssName": "Ph",
+            "key": "F#",
+            "bpm": 132,
+            "PC": 1
+        },
+        {
+            "name": "Best Friends",
+            "sName": "Bet Freds",
+            "ssName": "BF",
+            "key": "Bb#",
+            "bpm": 75,
+            "PC": 1
+        },
+        {
+            "name": "You Are The One Thing",
+            "sName": "UR One Thing",
+            "ssName": "YATOT",
+            "key": "E",
+            "bpm": 146,
+            "PC": 1
+        },
+        {
+            "name": "This is Living",
+            "sName": "Living",
+            "ssName": "TIL",
+            "key": "D",
+            "bpm": 128,
+            "PC": 1
+        },
+        {
+            "name": "Never Have I Ever",
+            "sName": "Nvr Hv I Evr",
+            "ssName": "NHIE",
+            "key": "C",
+            "bpm": 72,
+            "PC": 1
+        },
+        {
+            "name": "Do It Again",
+            "sName": "DI Again",
+            "ssName": "DIA",
+            "key": "Bb",
+            "bpm": 86,
+            "PC": 1
+        },
+        {
+            "name": "Here Again",
+            "sName": "H Again",
+            "ssName": "HA",
+            "key": "D",
+            "bpm": 68,
+            "PC": 1
+        },
+        {
+            "name": "As You Find Me",
+            "sName": "U Fnd Me",
+            "ssName": "AYFM",
+            "key": "D",
+            "bpm": 66,
+            "PC": 1
+        },
+        {
+            "name": "Awake My Soul",
+            "sName": "Awake Soul",
+            "ssName": "AMS",
+            "key": "F",
+            "bpm": 127,
+            "PC": 1
+        },
+        {
+            "name": "Phenomena",
+            "sName": "Pheno",
+            "ssName": "Ph",
+            "key": "F#",
+            "bpm": 132,
+            "PC": 1
+        },
+        {
+            "name": "Phenomena",
+            "sName": "Pheno",
+            "ssName": "Ph",
+            "key": "F#",
+            "bpm": 132,
+            "PC": 1
+        }
+    ],
+    "actions": [
+        {
+            "name": "NULL",
+            "type": 8,
+            "program": 70,
+            "value": 127
+        },
+        {
+            "name": "Down",
+            "type": 0,
+            "program": 70,
+            "value": 127
+        },
+        {
+            "name": "Up",
+            "type": 0,
+            "program": 71,
+            "value": 127
+        },
+        {
+            "name": "Down Set",
+            "type": 0,
+            "program": 72,
+            "value": 127
+        },
+        {
+            "name": "Up Set",
+            "type": 0,
+            "program": 73,
+            "value": 127
+        },
+        {
+            "name": "Delay 0",
+            "type": 0,
+            "program": 74,
+            "value": 127
+        },
+        {
+            "name": "Delay 1",
+            "type": 0,
+            "program": 75,
+            "value": 127
+        },
+        {
+            "name": "Flange",
+            "type": 0,
+            "program": 76,
+            "value": 127
+        },
+        {
+            "name": "Chorus",
+            "type": 0,
+            "program": 77,
+            "value": 127
+        },
+        {
+            "name": "Trem",
+            "type": 0,
+            "program": 78,
+            "value": 127
+        },
+        {
+            "name": "Amp",
+            "type": 0,
+            "program": 79,
+            "value": 127
+        },
+        {
+            "name": "Swell",
+            "type": 0,
+            "program": 80,
+            "value": 127
+        },
+        {
+            "name": "Swell Delay",
+            "type": 0,
+            "program": 81,
+            "value": 127
+        },
+        {
+            "name": "Verb",
+            "type": 0,
+            "program": 82,
+            "value": 127
+        }
+    ],
+    "FSAction": [
+        {
+            "action": 7,
+            "holdAction": 0
+        },
+        {
+            "action": 8,
+            "holdAction": 0
+        },
+        {
+            "action": 9,
+            "holdAction": 0
+        },
+        {
+            "action": 10,
+            "holdAction": 0
+        },
+        {
+            "action": 5,
+            "holdAction": 0
+        },
+        {
+            "action": 6,
+            "holdAction": 0
+        },
+        {
+            "action": 13,
+            "holdAction": 0
+        },
+        {
+            "action": 11,
+            "holdAction": 12
+        },
+        {
+            "action": 1,
+            "holdAction": 3
+        },
+        {
+            "action": 2,
+            "holdAction": 4
+        }
+    ]
+}

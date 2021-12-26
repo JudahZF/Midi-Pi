@@ -1,14 +1,5 @@
-import json
-import sys
-import busio
-import time
-import digitalio
+import json, sys, busio, time, digitalio, presets, usb_midi, ui, midi, board
 import effects as FX
-import presets
-import usb_midi
-import ui
-import midi
-import board
 from log import log
 from lcd.lcd import LCD
 from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
@@ -67,32 +58,29 @@ lcd.print("#")
 
 # Load Settings from JSON
 file = open("settings.json", "r")
-settings = json.load(file)
+settingsFile = json.load(file)
 file.close()
 lcd.print("#")
-print(settings)
-if str(settings) == "{}":
+print(settingsFile)
+if str(settingsFile) == "{}":
     print("empty JSON")
     x = {"firstSetup": True}
-    settings = json.dumps(x)
-    print(settings)
+    settingsFile = json.dumps(x)
+    print(settingsFile)
     file = open("settings.json", "w")
-    file.write(settings)
+    file.write(settingsFile)
     file.close()
     file = open("settings.json", "r")
-    settings = json.load(file)
+    settingsFile = json.load(file)
     file.close()
 log("Imported JSON")
 
 # Import Presets & Settings
-songs = []
-actions = []
-mode = settings["mode"]
-set = settings["Set Name"]
-midiHost = settings["midiHost"]
+mode = settingsFile["mode"]
+midiHost = settingsFile["midiHost"]
 
 # Check for firstime Setup
-if (settings["firstSetup"] is True):
+if (settingsFile["firstSetup"] is True):
     lcd.clear()
     lcd.print("                    ")
     lcd.print("    Please Setup    ")
@@ -103,90 +91,5 @@ if (settings["firstSetup"] is True):
 midi.setupMidi(midiHost)
 log(str("Set Up Midi: " + midiHost))
 lcd.print("#")
-
-# Save All Songs to Songs Array
-for i in settings["songs"]:
-    songs.append(
-        presets.Song(i["name"], i["sName"], i["ssName"], i["bpm"], i["key"], i["PC"])
-    )
-    log(str("Adding Song: " + i["name"]))
-lcd.print("#")
-
-# Import Effects to Actions Array
-for i in settings["actions"]:
-    actions.append(FX.action(i["name"], i["type"], i["program"], i["value"], False))
-    log(str("Action Action: " + i["name"]))
-
-lcd.print("#")
-
-# Import Footswitches
-x = 0
-for i in settings["FSAction"]:
-    FootSwitches[x].setAction(
-        actions[i["action"]], actions[i["holdAction"]]
-    )
-    x = x + 1
-log(str("Set Up Footswitches"))
-lcd.print("#")
-
-lcd.set_cursor_pos(3, 10)
-lcd.print("Done!     ")
-
-currentSongNo = settings["currentSong"]
-songNo = currentSongNo
-
-# GUI Reprint Function
-def PrintGui (l3Mode, FSLine, DeviceMode):
-    if DeviceMode == "Stomp":
-        lcd.print(ui.line0(songs[currentSongNo], "Both"))
-        lcd.print(ui.line1(songs[int(currentSongNo - 1)], "Both"))
-        lcd.print(ui.line2(songs[int(currentSongNo + 1)], "Both"))
-        lcd.print(ui.line3(mode, l3Mode, FSLine))
-    elif DeviceMode == "Live":
-        lcd.print(ui.line0(set, "Live"))
-        lcd.print(ui.line1(midiHost, "Live"))
-        lcd.print(ui.line2(songs[int(songNo)], "Live"))
-        lcd.print(ui.line3(mode, l3Mode, FSLine))
-
-# Print First GUI
-PrintGui("clear", "Nothing Here", mode)
-log(str("Main UI Printed"))
-
-# Main Loop
-timePress = 0
-timeSincePress = 0
-cleared = True
-while True:
-
-    # Check for New Song
-    songNo = midi.checkSong(currentSongNo)
-    if songNo is not currentSongNo:
-        try:
-            lcd.home()
-            PrintGui("clear", (FSin[1]), mode)
-            currentSongNo = songNo
-        except Exception as e:
-            log(str("Change Song Error: " + str(e)))
-
-    # Check For Footswitch Press
-    FSin = FX.checkFS(FootSwitches, 0.5)
-    if FSin[0] is False:
-        timeSincePress = time.monotonic() - timePress
-        if timeSincePress == 21600:
-            shutdown(10)
-        if (timeSincePress >= 5) and (cleared == False):
-            PrintGui("clear", "Nerds", mode)
-            log(str("Cleared GUI"))
-            cleared = True
-        pass
-    elif FSin[0] is True:
-        timePress = time.monotonic()
-        log(str("FS " + FSin[1] + " Pressed"))
-        timeSincePress = 0
-        lcd.home()
-        cleared = False
-        PrintGui("loop", (FSin[1]), mode)
-
-# Shutdown
-"""if FSin[2] == 0:
-    shutdown(8)"""
+if mode == "Preset":
+    presets.run()
