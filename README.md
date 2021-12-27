@@ -17,5 +17,8 @@ Finally open settings.json and edit the config as needed
 ## To Do
 
 - [ ] Create Live Mode
-  - [ ] Program UI
+  - [x] Program UI
+  - [x] Program Midi Receiving
+  - [ ] Program FS
+  - [ ] Create Midi Clips
 - [ ] Program Editor
