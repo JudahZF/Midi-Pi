@@ -1,13 +1,23 @@
-import json, sys, busio, time, digitalio, presets, usb_midi, ui, midi, board
+import busio, board, digitalio
+import json, sys, time, usb_midi, ui, midi
+import presets
+from settings import settingsFile, mode, midiHost, presetFile
 import effects as FX
 from log import log
 from lcd.lcd import LCD
 from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 from lcd.lcd import CursorMode
-
+ 
 # Setup LCD
 lcd = LCD(I2CPCF8574Interface(busio.I2C(scl=board.GP3, sda=board.GP2), 0x27))
 lcd.set_cursor_mode(CursorMode.HIDE)
+
+if settingsFile == "":
+    lcd.clear()
+    lcd.print("Add a settings file")
+    time.sleep(30)
+    lcd.clear()
+    sys.exit()
 
 # Setup Custom Chars
 lcd.create_char(0, bytearray([0x00, 0x04, 0x08, 0x1F, 0x08, 0x04, 0x00, 0x00]))  # Prev
@@ -56,29 +66,6 @@ FootSwitches = [
 ]
 lcd.print("#")
 
-# Load Settings from JSON
-file = open("settings.json", "r")
-settingsFile = json.load(file)
-file.close()
-lcd.print("#")
-print(settingsFile)
-if str(settingsFile) == "{}":
-    print("empty JSON")
-    x = {"firstSetup": True}
-    settingsFile = json.dumps(x)
-    print(settingsFile)
-    file = open("settings.json", "w")
-    file.write(settingsFile)
-    file.close()
-    file = open("settings.json", "r")
-    settingsFile = json.load(file)
-    file.close()
-log("Imported JSON")
-
-# Import Presets & Settings
-mode = settingsFile["mode"]
-midiHost = settingsFile["midiHost"]
-
 # Check for firstime Setup
 if (settingsFile["firstSetup"] is True):
     lcd.clear()
@@ -92,4 +79,5 @@ midi.setupMidi(midiHost)
 log(str("Set Up Midi: " + midiHost))
 lcd.print("#")
 if mode == "Preset":
-    presets.run()
+    run = presets.presetMode(lcd, presetFile, FootSwitches, midiHost)
+run.run()
