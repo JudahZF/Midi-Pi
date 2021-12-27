@@ -48,7 +48,7 @@ def line0(text, displayMode):
         line = addKey(text, line)
         line = addBPM(text, line)
         return line
-    elif displayMode == "Live":
+    elif displayMode == "Preset":
         setName = text[:20]
         if len(setName) < 20:
             setName = " " + setName
@@ -74,7 +74,7 @@ def line1(text, displayMode):
         line = addKey(text, line)
         line = addBPM(text, line)
         return line
-    elif displayMode == "Live":
+    elif displayMode == "Preset":
         line = "Midi Mode: " + text[:9]
         while 20 > len(line):
             line = line + " "
@@ -97,7 +97,7 @@ def line2(text, displayMode):
         line = addKey(text, line)
         line = addBPM(text, line)
         return line
-    elif displayMode == "Live":
+    elif displayMode == "Preset":
         line = "Track: " + shortenName(text, 13)
         while 20 > len(line):
             line = line + " "
