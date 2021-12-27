@@ -56,6 +56,11 @@ def line0(text, displayMode):
             setName = setName + " "
         line = setName
         return line
+    elif displayMode == "Live":
+        songName = text[:14]
+        line = "Song: " + songName
+        line = line + " "*(20-len(line))
+        return line
 
 def line1(text, displayMode):
     if displayMode == "BPM":
@@ -78,6 +83,13 @@ def line1(text, displayMode):
         line = "Midi Mode: " + text[:9]
         while 20 > len(line):
             line = line + " "
+        return line
+    elif displayMode == "Live":
+        keyBPM = text.split(":")
+        line = "Key: " + keyBPM[0] 
+        line = line + " "*(10-len(line))
+        line = line + "BPM: " + keyBPM[1]
+        line = line + " "*(20-len(line))
         return line
 
 def line2(text, displayMode):
@@ -102,19 +114,23 @@ def line2(text, displayMode):
         while 20 > len(line):
             line = line + " "
         return line
+    elif displayMode == "Live":
+        parts = text.split(":")
+        line = "C: " + parts[0][:6] + " "*(10 - len("C: " + parts[0][:6])) + chr(1) + ": " + parts[1][:7] + " "*(10 - len(chr(0) + ": " + parts[1][:7]))
+        return line
 
 def line3(mode, displayMode, FSLine):
     line = ""
-    if displayMode == "clear":
-        line = "Mode:" + mode
-        while 11 >= len(line):
-            line = line + " "
-        line = line + " Midi Pi"
-    elif displayMode == "loop":
-        line = "Mode:" + mode[:1]
+    if displayMode == "loop":
+        line = "Mode: " + mode[:1]
         while 6 >= len(line):
             line = line + " "
         while 12 >= len(FSLine):
            FSLine = " " + FSLine
         line = line + FSLine
+    else:
+        line = "Mode: " + mode
+        while 11 >= len(line):
+            line = line + " "
+        line = line + " Midi Pi"
     return line

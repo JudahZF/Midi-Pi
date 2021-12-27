@@ -2,7 +2,7 @@ import midi, time, ui, midi, sys
 import effects as FX
 from log import log
 
-class presetMode ():
+class mode ():
     def __init__(self, lcd, liveFile, fs, midi):
         self.mode = "Live"
         self.liveFile = liveFile
@@ -17,19 +17,11 @@ class presetMode ():
             time.sleep(30)
             self.lcd.clear()
             sys.exit()
-        songs = []
         actions = []
-        set = self.presetFile["Set Name"]
-        # Save All Songs to Songs Array
-        for i in self.presetFile["songs"]:
-            songs.append(
-                Song(i["name"], i["sName"], i["ssName"], i["bpm"], i["key"], i["PC"])
-            )
-            log(str("Adding Song: " + i["name"]))
         self.lcd.print("#")
 
         # Import Effects to Actions Array
-        for i in self.presetFile["actions"]:
+        for i in self.liveFile["actions"]:
             actions.append(FX.action(i["name"], i["type"], i["program"], i["value"], False))
             log(str("Action Action: " + i["name"]))
 
@@ -37,7 +29,7 @@ class presetMode ():
 
         # Import Footswitches
         x = 0
-        for i in self.presetFile["FSAction"]:
+        for i in self.liveFile["FSAction"]:
             self.FootSwitches[x].setAction(
                 actions[i["action"]], actions[i["holdAction"]]
             )
@@ -48,32 +40,31 @@ class presetMode ():
         self.lcd.set_cursor_pos(3, 10)
         self.lcd.print("Done!     ")
 
-        currentSongNo = self.presetFile["currentSong"]
-        songNo = currentSongNo
-
         # GUI Reprint Function
-        def PrintGui (l3Mode, FSLine):
-            self.lcd.print(ui.line0(set, "Preset"))
-            self.lcd.print(ui.line1(self.midiHost, "Preset"))
-            self.lcd.print(ui.line2(songs[int(songNo)], "Preset"))
+        def PrintGui (name, key, BPM, currPart, nxtPart, l3Mode, FSLine):
+            self.lcd.home()
+            self.lcd.print(ui.line0(name, "Live"))
+            self.lcd.print(ui.line1(key+":"+str(BPM), "Live"))
+            self.lcd.print(ui.line2(currPart+":"+nxtPart, "Live"))
             self.lcd.print(ui.line3(self.mode, l3Mode, FSLine))
 
         # Print First GUI
-        PrintGui("clear", "Nothing Here")
+        PrintGui("test", "C", 140, "Intro", "Verse", "Clear", "")
         log(str("Main UI Printed"))
 
         # Main Loop
         timePress = 0
         timeSincePress = 0
         cleared = True
+        currentSong = []
         while True:
             # Check for New Song
-            songNo = midi.checkSong(currentSongNo)
-            if songNo is not currentSongNo:
+            songInfo = midi.checkSong(currentSong, "Live")
+            #songInfo = midi.partChange(songInfo)
+            if songInfo is not currentSong:
                 try:
-                    self.lcd.home()
-                    PrintGui("clear", (FSin[1]), self.mode)
-                    currentSongNo = songNo
+                    PrintGui(songInfo[0], songInfo[1], songInfo[2], songInfo[3], songInfo[4], FSin[1], "")
+                    currentSong = songInfo
                 except Exception as e:
                     log(str("Change Song Error: " + str(e)))
 
@@ -90,6 +81,5 @@ class presetMode ():
                 timePress = time.monotonic()
                 log(str("FS " + FSin[1] + " Pressed"))
                 timeSincePress = 0
-                self.lcd.home()
                 cleared = False
                 PrintGui("loop", (FSin[1]), self.mode)
