@@ -13,7 +13,7 @@ class Song ():
         self.bpmS = 60 / self.bpm
         self.PC = PC
 
-class presetMode ():
+class mode ():
     def __init__(self, lcd, presetFile, fs, midi):
         self.mode = "Preset"
         self.presetFile = presetFile
@@ -79,7 +79,7 @@ class presetMode ():
         cleared = True
         while True:
             # Check for New Song
-            songNo = midi.checkSong(currentSongNo)
+            songNo = midi.checkSong(currentSongNo, "Preset")
             if songNo is not currentSongNo:
                 try:
                     self.lcd.home()

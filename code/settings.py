@@ -37,6 +37,8 @@ except Exception as e:
     print("Error: " + str(e))
     presetFile = ""
 
+liveFile = ""
+
 try:
     file = open("live.json", "r")
     liveFile = json.load(file)
