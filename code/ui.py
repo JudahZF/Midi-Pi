@@ -75,7 +75,7 @@ def line1(text, displayMode):
         return line
     elif displayMode == "Both":
         songName = shortenName(text, 7)
-        line = chr(0) + " " + songName
+        line = "C " + songName
         line = addKey(text, line)
         line = addBPM(text, line)
         return line
@@ -110,13 +110,19 @@ def line2(text, displayMode):
         line = addBPM(text, line)
         return line
     elif displayMode == "Preset":
-        line = "Track: " + shortenName(text, 13)
+        line = "Midi Mode: " + text[:9]
         while 20 > len(line):
             line = line + " "
         return line
     elif displayMode == "Live":
         parts = text.split(":")
-        line = "C: " + parts[0][:6] + " "*(10 - len("C: " + parts[0][:6])) + chr(1) + ": " + parts[1][:7] + " "*(10 - len(chr(0) + ": " + parts[1][:7]))
+        current = parts[0].split(";")
+        next = parts[1].split(";")
+        if len(current) == 2: currentLine = "C:" + current[0][:6] + " " + current[1][:1] + " "*(8-len(current[0][:6] + " " + current[1][:1]))
+        elif len(current) == 1: currentLine = "C:" + current[0][:8] + " "*(8-len(current[0][:8]))
+        if len(next) == 2: nextLine = chr(1) + ":" + next[0][:6] + " " + next[1][:1] + " "*(8-len(next[0][:6] + " " + next[1][:1]))
+        elif len(next) == 1: nextLine = chr(1) + ":" + next[0][:8] + " "*(8-len(next[0][:8]))
+        line = currentLine + nextLine
         return line
 
 def line3(mode, displayMode, FSLine):
