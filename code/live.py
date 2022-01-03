@@ -2,13 +2,32 @@ import midi, time, ui, midi, sys
 import effects as FX
 from log import log
 
+class liveAction:
+    def __init__(self, program, value, state):
+        self.program = program
+        self.value = value
+        self.state = state
+
+    # Toogle The Footswitch
+    def toggle(self):
+        midi.sendCC(self.program, self.value)
+        print("Sent CC:" + str(self.program))
+        self.state = not self.state
+
+    def setState(self, state):
+        if state != self.state:
+            self.write()
+            self.toggle()
+
+
 class mode ():
-    def __init__(self, lcd, liveFile, fs, midi):
+    def __init__(self, lcd, liveFile, fs, midi, CC):
         self.mode = "Live"
         self.liveFile = liveFile
         self.lcd = lcd
         self.FootSwitches = fs
         self.midiHost = midi
+        self.ccstart = CC
 
     def run (self):
         if self.liveFile == "":
@@ -21,19 +40,17 @@ class mode ():
         self.lcd.print("#")
 
         # Import Effects to Actions Array
-        for i in self.liveFile["actions"]:
-            actions.append(FX.action(i["name"], i["type"], i["program"], i["value"], False))
-            log(str("Action Action: " + i["name"]))
+        for i in range(20):
+            actions.append(liveAction((self.ccstart+i), 127, False))
+            log(str("Added CC: " + str(i+self.ccstart)))
 
         self.lcd.print("#")
 
         # Import Footswitches
-        x = 0
-        for i in self.liveFile["FSAction"]:
-            self.FootSwitches[x].setAction(
-                actions[i["action"]], actions[i["holdAction"]]
+        for i in range(10):
+            self.FootSwitches[i].setAction(
+                actions[i], actions[i+10]
             )
-            x = x + 1
         log(str("Set Up Footswitches"))
         self.lcd.print("#")
 
@@ -49,37 +66,40 @@ class mode ():
             self.lcd.print(ui.line3(self.mode, l3Mode, FSLine))
 
         # Print First GUI
-        PrintGui("test", "C", 140, "Intro", "Verse", "Clear", "")
+        PrintGui("", "", 120, "", "", "Clear", "")
         log(str("Main UI Printed"))
 
         # Main Loop
         timePress = 0
         timeSincePress = 0
         cleared = True
-        currentSong = []
+        currentSong = ["", "", 120, "", ""]
+        songInfo = ["", "", 120, "", ""]
+        l3 = "Clear"
         while True:
             # Check for New Song
             songInfo = midi.checkSong(currentSong, "Live")
-            #songInfo = midi.partChange(songInfo)
+            FSin = FX.checkFS(self.FootSwitches, 0.5)
             if songInfo is not currentSong:
                 try:
-                    PrintGui(songInfo[0], songInfo[1], songInfo[2], songInfo[3], songInfo[4], FSin[1], "")
+                    PrintGui(songInfo[0], songInfo[1], songInfo[2], songInfo[3], songInfo[4], l3, FSin[1])
                     currentSong = songInfo
                 except Exception as e:
                     log(str("Change Song Error: " + str(e)))
 
             # Check For Footswitch Press
-            FSin = FX.checkFS(self.FootSwitches, 0.5)
             if FSin[0] is False:
                 timeSincePress = time.monotonic() - timePress
-                if (timeSincePress >= 5) and (cleared == False):
-                    PrintGui("clear", "Nerds", self.mode)
+                if (timeSincePress >= 1) and (cleared == False):
+                    l3 = "Clear"
+                    PrintGui(songInfo[0], songInfo[1], songInfo[2], songInfo[3], songInfo[4], l3, FSin[1])
                     log(str("Cleared GUI"))
                     cleared = True
                 pass
             elif FSin[0] is True:
                 timePress = time.monotonic()
-                log(str("FS " + FSin[1] + " Pressed"))
+                log(str(FSin[1] + " Pressed"))
                 timeSincePress = 0
                 cleared = False
-                PrintGui("loop", (FSin[1]), self.mode)
+                l3 = "loop"
+                PrintGui(songInfo[0], songInfo[1], songInfo[2], songInfo[3], songInfo[4], l3, FSin[1])

@@ -1,4 +1,4 @@
-from settings import settingsFile, mode, midiHost, presetFile
+from settings import settingsFile, mode, midiHost, presetFile, CC
 import busio, board, digitalio, json, sys, time, usb_midi, ui, midi, presets, live
 import effects as FX
 from log import log
@@ -79,5 +79,5 @@ lcd.print("#")
 if mode == "Preset":
     run = presets.mode(lcd, presetFile, FootSwitches, midiHost)
 if mode == "Live":
-    run = live.mode(lcd, presetFile, FootSwitches, midiHost)
+    run = live.mode(lcd, presetFile, FootSwitches, midiHost, CC)
 run.run()
