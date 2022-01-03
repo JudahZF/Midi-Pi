@@ -41,20 +41,20 @@ def checkSong(CurrentSong, mode):
             if midiIn.control is 3: 
                 songNo = midiIn.value
         except Exception:
-                    songNo = CurrentSong    
+                    songNo = CurrentSong  
         return songNo
     if mode == "Live":
         songName = []
         try: song = CurrentSong[0]
         except Exception: song = ""
         try: bpm = CurrentSong[2]
-        except Exception: bpm = 0
+        except Exception: bpm = 120
         try: key = CurrentSong[1]
-        except Exception: key = "U"
+        except Exception: key = ""
         try: currentPart = CurrentSong[3]
-        except Exception: currentPart = "Unknown"
+        except Exception: currentPart = ""
         try: nextPart = CurrentSong[3]
-        except Exception: nextPart = "Unknown"
+        except Exception: nextPart = ""
         midiIn = midi.receive()
         try:
             if (midiIn.note == 5) & (midiIn.velocity > 0):
@@ -101,9 +101,9 @@ def checkSong(CurrentSong, mode):
                     elif midiIn.note == 22: key = "A#"
                     elif midiIn.note == 23: key = "B"
                 if midiIn.note == 5: currentPart = str(liveFile['parts'][midiIn.velocity-1])
-                if midiIn.note == 4: currentPart = currentPart + " " + str(midiIn.velocity)
+                if midiIn.note == 4: currentPart = currentPart + ";" + str(midiIn.velocity)
                 if midiIn.note == 8: nextPart = str(liveFile['parts'][midiIn.velocity-1])
-                if midiIn.note == 7: nextPart = nextPart + " " + str(midiIn.velocity)
+                if midiIn.note == 7: nextPart = nextPart + ";" + str(midiIn.velocity)
                 if midiIn.note == 1: velocity = midiIn.velocity
             for i in songName:
                 song += i
