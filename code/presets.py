@@ -65,8 +65,8 @@ class mode ():
         # GUI Reprint Function
         def PrintGui (l3Mode, FSLine):
             self.lcd.print(ui.line0(set, "Preset"))
-            self.lcd.print(ui.line1(self.midiHost, "Preset"))
-            self.lcd.print(ui.line2(songs[int(songNo)], "Preset"))
+            self.lcd.print(ui.line1(songs[int(songNo)], "Both"))
+            self.lcd.print(ui.line2(self.midiHost, "Preset"))
             self.lcd.print(ui.line3(self.mode, l3Mode, FSLine))
 
         # Print First GUI
@@ -83,7 +83,7 @@ class mode ():
             if songNo is not currentSongNo:
                 try:
                     self.lcd.home()
-                    PrintGui("clear", (FSin[1]), self.mode)
+                    PrintGui("clear", (FSin[1]))
                     currentSongNo = songNo
                 except Exception as e:
                     log(str("Change Song Error: " + str(e)))
@@ -93,7 +93,7 @@ class mode ():
             if FSin[0] is False:
                 timeSincePress = time.monotonic() - timePress
                 if (timeSincePress >= 5) and (cleared == False):
-                    PrintGui("clear", "Nerds", self.mode)
+                    PrintGui("clear", "Nerds")
                     log(str("Cleared GUI"))
                     cleared = True
                 pass
@@ -103,4 +103,4 @@ class mode ():
                 timeSincePress = 0
                 self.lcd.home()
                 cleared = False
-                PrintGui("loop", (FSin[1]), self.mode)
+                PrintGui("loop", (FSin[1]))
