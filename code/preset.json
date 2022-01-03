@@ -1,5 +1,5 @@
 {
-    "Set Name": "Arun Youth Summer",
+    "Set Name": "Arun Youth Friday",
     "currentSong": 1,
     "songs": [
         {
@@ -11,35 +11,35 @@
             "PC": 1
         },
         {
-            "name": "Phenomena",
-            "sName": "Pheno",
+            "name": "Real Love",
+            "sName": "Real L",
+            "ssName": "RL",
+            "key": "D",
+            "bpm": 140,
+            "PC": 1
+        },
+        {
+            "name": "This Is Living",
+            "sName": "Living",
+            "ssName": "TIL",
+            "key": "D",
+            "bpm": 128,
+            "PC": 1
+        },
+        {
+            "name": "Pheomena (DA DA)",
+            "sName": "Pheomena",
             "ssName": "Ph",
             "key": "F#",
             "bpm": 132,
             "PC": 1
         },
         {
-            "name": "Best Friends",
-            "sName": "Bet Freds",
-            "ssName": "BF",
-            "key": "Bb#",
-            "bpm": 75,
-            "PC": 1
-        },
-        {
             "name": "You Are The One Thing",
-            "sName": "UR One Thing",
-            "ssName": "YATOT",
+            "sName": "1 Thing",
+            "ssName": "YRT1T",
             "key": "E",
             "bpm": 146,
-            "PC": 1
-        },
-        {
-            "name": "This is Living",
-            "sName": "Living",
-            "ssName": "TIL",
-            "key": "D",
-            "bpm": 128,
             "PC": 1
         },
         {
@@ -51,27 +51,35 @@
             "PC": 1
         },
         {
+            "name": "Best Friends",
+            "sName": "Friends",
+            "ssName": "BF",
+            "key": "Bb",
+            "bpm": 75,
+            "PC": 1
+        },
+        {
+            "name": "Falling Into You",
+            "sName": "Falling",
+            "ssName": "FIY",
+            "key": "G",
+            "bpm": 105,
+            "PC": 1
+        },
+        {
             "name": "Do It Again",
-            "sName": "DI Again",
+            "sName": "Do Again",
             "ssName": "DIA",
             "key": "Bb",
             "bpm": 86,
             "PC": 1
         },
         {
-            "name": "Here Again",
-            "sName": "H Again",
-            "ssName": "HA",
-            "key": "D",
+            "name": "King Of Kings",
+            "sName": "King^2",
+            "ssName": "KOK",
+            "key": "C",
             "bpm": 68,
-            "PC": 1
-        },
-        {
-            "name": "As You Find Me",
-            "sName": "U Fnd Me",
-            "ssName": "AYFM",
-            "key": "D",
-            "bpm": 66,
             "PC": 1
         },
         {
@@ -83,19 +91,35 @@
             "PC": 1
         },
         {
-            "name": "Phenomena",
-            "sName": "Pheno",
-            "ssName": "Ph",
-            "key": "F#",
-            "bpm": 132,
+            "name": "As You Find Me",
+            "sName": "Find Me",
+            "ssName": "AYFM",
+            "key": "D",
+            "bpm": 66,
             "PC": 1
         },
         {
-            "name": "Phenomena",
-            "sName": "Pheno",
-            "ssName": "Ph",
-            "key": "F#",
-            "bpm": 132,
+            "name": "Known",
+            "sName": "Known",
+            "ssName": "K",
+            "key": "D",
+            "bpm": 78,
+            "PC": 1
+        },
+        {
+            "name": "Highs And Lows",
+            "sName": "High Lows",
+            "ssName": "H&L",
+            "key": "Bb",
+            "bpm": 83,
+            "PC": 1
+        },
+        {
+            "name": "Dancing On The Waves",
+            "sName": "Dancing",
+            "ssName": "DOTW",
+            "key": "E",
+            "bpm": 97,
             "PC": 1
         }
     ],

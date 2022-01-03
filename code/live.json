@@ -1,6 +1,20 @@
 {
+    "CCStart": 80,
     "parts": [
         "Intro",
-        "Verse"
+        "Verse",
+        "Pre Chorus",
+        "Chorus",
+        "Post Chorus",
+        "Tag",
+        "Interlude",
+        "Breakdown",
+        "Bridge",
+        "Outro",
+        "Ending",
+        "Instrumental",
+        "Vamp",
+        "Turnaround",
+        "Turnaround"
     ]
 }
