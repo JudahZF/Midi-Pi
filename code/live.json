@@ -1,20 +1,22 @@
 {
-    "CCStart": 80,
-    "parts": [
-        "Intro",
-        "Verse",
-        "Pre Chorus",
-        "Chorus",
-        "Post Chorus",
-        "Tag",
-        "Interlude",
-        "Breakdown",
-        "Bridge",
-        "Outro",
-        "Ending",
-        "Instrumental",
-        "Vamp",
-        "Turnaround",
-        "Turnaround"
-    ]
+  "CCStart" : 80,
+  "parts" : [
+    "Intro",
+    "Verse",
+    "Pre Chorus",
+    "Chorus",
+    "Post Chorus",
+    "Tag",
+    "Interlude",
+    "Breakdown",
+    "Bridge",
+    "Outro",
+    "Ending",
+    "Instrumental",
+    "Vamp",
+    "Turnaround",
+    "Build",
+    "Refrain",
+    "Free"
+  ]
 }
