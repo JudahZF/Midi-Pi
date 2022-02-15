@@ -11,17 +11,19 @@ class liveAction:
 
     # Toogle The Footswitch
     def toggle(self):
-        if (self.doToggle):
-            if (self.state):
+        if (self.doToggle == 1):
+            if (self.state == 1):
                 midi.sendCC(self.program, self.value)
+                print("Sent CC:" + str(self.program) + " Value: "+ str(self.value))
+                self.state = 0
             else:
                 midi.sendCC(self.program, 0)
-            print("Sent CC:" + str(self.program))
-            self.state = not self.state
+                print("Sent CC:" + str(self.program) + " Value: "+ str(0))
+                self.state = 1
         else:
             midi.sendCC(self.program, self.value)
-            print("Sent CC:" + str(self.program))
-            self.state = not self.state
+            print("Sent CC:" + str(self.program) + " Value: "+ str(self.value))
+        
         
 
     def setState(self, state):
@@ -51,9 +53,9 @@ class mode ():
 
         # Import Effects to Actions Array
         for i in range(20):
-            if i == 0 or (4 <= i and i <= 6):
-                actions.append(liveAction((self.ccstart+i), 127, False, True))
-            else: actions.append(liveAction((self.ccstart+i), 127, False, False))
+            if i == 0 or (4 <= i and i <= 6) or i == 10 or (14 <= i and i <= 16):
+                actions.append(liveAction((self.ccstart+i), 127, False, 1))
+            else: actions.append(liveAction((self.ccstart+i), 127, False, 0))
             log(str("Added CC: " + str(i+self.ccstart)))
 
         self.lcd.print("#")
