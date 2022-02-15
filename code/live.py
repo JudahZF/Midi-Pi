@@ -3,16 +3,26 @@ import effects as FX
 from log import log
 
 class liveAction:
-    def __init__(self, program, value, state):
+    def __init__(self, program, value, state, doToggle):
         self.program = program
+        self.doToggle = doToggle
         self.value = value
         self.state = state
 
     # Toogle The Footswitch
     def toggle(self):
-        midi.sendCC(self.program, self.value)
-        print("Sent CC:" + str(self.program))
-        self.state = not self.state
+        if (self.doToggle):
+            if (self.state):
+                midi.sendCC(self.program, self.value)
+            else:
+                midi.sendCC(self.program, 0)
+            print("Sent CC:" + str(self.program))
+            self.state = not self.state
+        else:
+            midi.sendCC(self.program, self.value)
+            print("Sent CC:" + str(self.program))
+            self.state = not self.state
+        
 
     def setState(self, state):
         if state != self.state:
@@ -41,8 +51,15 @@ class mode ():
 
         # Import Effects to Actions Array
         for i in range(20):
-            actions.append(liveAction((self.ccstart+i), 127, False))
+            if i == 0 or (4 <= i and i <= 6):
+                actions.append(liveAction((self.ccstart+i), 127, False, True))
+            else: actions.append(liveAction((self.ccstart+i), 127, False, False))
             log(str("Added CC: " + str(i+self.ccstart)))
+        
+        actions[0] = liveAction((self.ccstart+i), 127, False, False)
+        actions[4] = liveAction((self.ccstart+i), 127, False, False)
+        actions[5] = liveAction((self.ccstart+i), 127, False, False)
+        actions[6] = liveAction((self.ccstart+i), 127, False, False)
 
         self.lcd.print("#")
 
