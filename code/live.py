@@ -55,11 +55,6 @@ class mode ():
                 actions.append(liveAction((self.ccstart+i), 127, False, True))
             else: actions.append(liveAction((self.ccstart+i), 127, False, False))
             log(str("Added CC: " + str(i+self.ccstart)))
-        
-        actions[0] = liveAction((self.ccstart+i), 127, False, False)
-        actions[4] = liveAction((self.ccstart+i), 127, False, False)
-        actions[5] = liveAction((self.ccstart+i), 127, False, False)
-        actions[6] = liveAction((self.ccstart+i), 127, False, False)
 
         self.lcd.print("#")
 
