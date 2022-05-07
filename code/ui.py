@@ -61,6 +61,10 @@ def line0(text, displayMode):
         line = "Song: " + songName
         line = line + " "*(20-len(line))
         return line
+    elif displayMode == "Perf":
+        line = "Performance Mode"
+        line = line + " "*(20-len(line))
+        return line
 
 def line1(text, displayMode):
     if displayMode == "BPM":
@@ -89,6 +93,10 @@ def line1(text, displayMode):
         line = "Key: " + keyBPM[0] 
         line = line + " "*(10-len(line))
         line = line + "BPM: " + keyBPM[1]
+        line = line + " "*(20-len(line))
+        return line
+    elif displayMode == "Perf":
+        line = "Feel Free To"
         line = line + " "*(20-len(line))
         return line
 
@@ -123,6 +131,10 @@ def line2(text, displayMode):
         if len(next) == 2: nextLine = chr(1) + ":" + next[0][:6] + " " + next[1][:1] + " "*(8-len(next[0][:6] + " " + next[1][:1]))
         elif len(next) == 1: nextLine = chr(1) + ":" + next[0][:8] + " "*(8-len(next[0][:8]))
         line = currentLine + nextLine
+        return line
+    elif displayMode == "Perf":
+        line = "Tapdance"
+        line = line + " "*(20-len(line))
         return line
 
 def line3(mode, displayMode, FSLine):

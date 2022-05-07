@@ -1,5 +1,5 @@
 {
-    "firstSetup": false,
-    "mode": "Preset",
-    "midiHost": "Midi"
+	"firstSetup": false,
+	"mode": "Performance",
+	"midiHost": "Midi"
 }

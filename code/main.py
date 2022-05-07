@@ -1,5 +1,5 @@
 from settings import settingsFile, mode, midiHost, presetFile, CC
-import busio, board, digitalio, json, sys, time, usb_midi, ui, midi, presets, live
+import busio, board, digitalio, json, sys, time, usb_midi, ui, midi, presets, live, performance
 import effects as FX
 from log import log
 from lcd.lcd import LCD
@@ -78,6 +78,8 @@ log(str("Set Up Midi: " + midiHost))
 lcd.print("#")
 if mode == "Preset":
     run = presets.mode(lcd, presetFile, FootSwitches, midiHost)
-if mode == "Live":
+elif mode == "Live":
     run = live.mode(lcd, presetFile, FootSwitches, midiHost, CC)
+elif mode == "Perf":
+    run = performance.mode(lcd, presetFile, FootSwitches, midiHost, CC)
 run.run()
