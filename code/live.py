@@ -84,36 +84,22 @@ class mode ():
         log(str("Main UI Printed"))
 
         # Main Loop
-        timePress = 0
-        timeSincePress = 0
-        cleared = True
         currentSong = ["", "", 120, "", ""]
         songInfo = ["", "", 120, "", ""]
         l3 = "Clear"
+        LastState = [False, False, False, False, False, False, False, False, False, False]
         while True:
             # Check for New Song
             songInfo = midi.checkSong(currentSong, "Live")
-            FSin = FX.checkFS(self.FootSwitches, 0.5)
+            FSin = FX.checkFS(self.FootSwitches, LastState)
+            LastState = FSin[3]
             if songInfo is not currentSong:
                 try:
                     PrintGui(songInfo[0], songInfo[1], songInfo[2], songInfo[3], songInfo[4], l3, FSin[1])
                     currentSong = songInfo
                 except Exception as e:
                     log(str("Change Song Error: " + str(e)))
-
-            # Check For Footswitch Press
-            if FSin[0] is False:
-                timeSincePress = time.monotonic() - timePress
-                if (timeSincePress >= 1) and (cleared == False):
-                    l3 = "Clear"
-                    PrintGui(songInfo[0], songInfo[1], songInfo[2], songInfo[3], songInfo[4], l3, FSin[1])
-                    log(str("Cleared GUI"))
-                    cleared = True
-                pass
-            elif FSin[0] is True:
-                timePress = time.monotonic()
+            if FSin[0] is True:
                 log(str(FSin[1] + " Pressed"))
-                timeSincePress = 0
-                cleared = False
-                l3 = "loop"
+                l3 = "Clear"
                 PrintGui(songInfo[0], songInfo[1], songInfo[2], songInfo[3], songInfo[4], l3, FSin[1])
