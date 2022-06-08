@@ -82,8 +82,10 @@ class mode ():
         # Print First GUI
         PrintGui("Clear", "")
         log(str("Main UI Printed"))
+        LastState = [False, False, False, False, False, False, False, False, False, False]
         while True:
             # Check for New Song
-            FSin = FX.checkFS(self.FootSwitches, 0.5)
+            FSin = FX.checkFS(self.FootSwitches, LastState)
+            LastState = FSin[3]
             if FSin[0] is True:
                 log(str(FSin[1] + " Pressed"))

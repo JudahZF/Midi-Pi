@@ -60,7 +60,23 @@ class footSwitch:
 
 # FS setup
 
-def checkFS(FS, Htime):
+def checkFS(FS, LastState):
+    tapped = False
+    x = 0
+    held = ""
+    no = 0
+    for i in FS:
+        # Check For pressed Footswitch
+        if (i.IO.value is not LastState[i]) and (i.IO.value is True):
+            no = x
+            i.tap()
+            held = ("FS " + str(x) + " Tapped")
+            tapped = True
+            LastState[i] = not LastState[i]
+        else: x = x + 1
+    return [tapped, held, no, LastState]
+
+def checkFS(FS, LastState, Htime):
     tapped = False
     x = 0
     held = ""
