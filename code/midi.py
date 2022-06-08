@@ -74,41 +74,34 @@ def checkSong(CurrentSong, mode):
                     continue"""
                 match midiIn.note:
                     case 0:
-                        
-
-                if midiIn.note == 0:
-                    try:
-                        song = ""
-                        midiChar = chr(midiIn.velocity)
-                        songName.append(midiChar)
-                    except Exception as e:
-                        if str(e) != "'NoteOff' object has no attribute 'velocity'":
-                            log(str(e))
-                        pass
-                if midiIn.note == 3:
-                    bpm = midiIn.velocity
-                if midiIn.note == 2:
-                    bpm += (128^midiIn.velocity)-1
-                if (12 <= midiIn.note) & (midiIn.note <= 23):
-                    if midiIn.note == 12: key = "C"
-                    elif midiIn.note == 13: key = "C#"
-                    elif midiIn.note == 14: key = "D"
-                    elif midiIn.note == 15: key = "D#"
-                    elif midiIn.note == 16: key = "E"
-                    elif midiIn.note == 17: key = "F"
-                    elif midiIn.note == 18: key = "F#"
-                    elif midiIn.note == 19: key = "G"
-                    elif midiIn.note == 20: key = "G#"
-                    elif midiIn.note == 21: key = "A"
-                    elif midiIn.note == 22: key = "A#"
-                    elif midiIn.note == 23: key = "B"
-                if midiIn.note == 5: currentPart = str(liveFile['parts'][midiIn.velocity-1])
-                if midiIn.note == 4: currentPart = currentPart + ";" + str(midiIn.velocity)
-                if midiIn.note == 8: nextPart = str(liveFile['parts'][midiIn.velocity-1])
-                if midiIn.note == 7: nextPart = nextPart + ";" + str(midiIn.velocity)
-                if midiIn.note == 1: velocity = midiIn.velocity
-            for i in songName:
-                song += i
+                        try:
+                            song = ""
+                            midiChar = chr(midiIn.velocity)
+                            songName.append(midiChar)
+                        except Exception as e:
+                            if str(e) != "'NoteOff' object has no attribute 'velocity'":
+                                log(str(e))
+                            pass
+                    case 3: bpm = midiIn.velocity
+                    case 2: bpm += (128^midiIn.velocity)-1
+                    case 12: key = "C"
+                    case 13: key = "C#"
+                    case 14: key = "D"
+                    case 15: key = "D#"
+                    case 16: key = "E"
+                    case 17: key = "F"
+                    case 18: key = "F#"
+                    case 19: key = "G"
+                    case 20: key = "G#"
+                    case 21: key = "A"
+                    case 22: key = "A#"
+                    case 23: key = "B"
+                    case 5: currentPart = str(liveFile['parts'][midiIn.velocity-1])
+                    case 4: currentPart = currentPart + ";" + str(midiIn.velocity)
+                    case 8: nextPart = str(liveFile['parts'][midiIn.velocity-1])
+                    case 7: nextPart = nextPart + ";" + str(midiIn.velocity)
+                    case 1: velocity = midiIn.velocity
+            song = songName.join()
         log(str(song))
         log(str(bpm))
         log(str(key))
