@@ -54,24 +54,28 @@ def checkSong(CurrentSong, mode):
         except Exception: currentPart = ""
         try: nextPart = CurrentSong[3]
         except Exception: nextPart = ""
-        try:
+        """try:
             if (midiIn.note == 5) & (midiIn.velocity > 0):
                 pass
         except Exception as e:
             if str(e) != "'NoneType' object has no attribute 'note'":
                 log(str(e))
-            return CurrentSong
+            return CurrentSong"""
         if midiIn.note == 1:
             velocity = midiIn.velocity
             while velocity == 127:
                 midiIn = midi.receive()
-                try:
+                """try:
                     if ((midiIn.note <= 3 or ((12 <= midiIn.note) & (midiIn.note <= 23))) & (midiIn.velocity > 0)): 
                         pass
                 except Exception as e:
                     if str(e) != "'NoneType' object has no attribute 'note'":
                         log(str(e))
-                    continue
+                    continue"""
+                match midiIn.note:
+                    case 0:
+                        
+
                 if midiIn.note == 0:
                     try:
                         song = ""
