@@ -31,7 +31,7 @@ def sendCC(program, value):
 def sendPC(program):
     midi.send(ProgramChange(program))
 
-# Check CC 3 For SOng Change
+# Depreciated
 def checkSong(CurrentSong, mode):
     midiIn = midi.receive()
     if mode == "Preset":
@@ -83,7 +83,7 @@ def checkSong(CurrentSong, mode):
                                 log(str(e))
                             pass
                     case 3: bpm = midiIn.velocity
-                    case 2: bpm += (128^midiIn.velocity)-1
+                    case 2: bpm += (128*midiIn.velocity)
                     case 12: key = "C"
                     case 13: key = "C#"
                     case 14: key = "D"
@@ -108,3 +108,59 @@ def checkSong(CurrentSong, mode):
         log(str(currentPart))
         log(str(nextPart))
         return song, key, bpm, currentPart, nextPart
+
+def checkSongLive(CurrentSong):
+    midiIn = midi.receive()
+    if midiIn.note == 1:
+        velocity = midiIn.velocity
+        while velocity == 127:
+            midiIn = midi.receive()
+            try:
+                match midiIn.note:
+                    case 1: velocity = midiIn.velocity
+                    case 2: bpm += (128*midiIn.velocity)
+                    case 3: bpm = midiIn.velocity
+                    case 4: currentPart = currentPart + ";" + str(midiIn.velocity)
+                    case 5: currentPart = str(liveFile['parts'][midiIn.velocity-1])
+                    case 7: nextPart = nextPart + ";" + str(midiIn.velocity)
+                    case 8: nextPart = str(liveFile['parts'][midiIn.velocity-1])
+                    case 9: songNo = midiIn.value
+                    case 10: songNo += 128*midiIn.value
+                    case 12: key = "C"
+                    case 13: key = "C#"
+                    case 14: key = "D"
+                    case 15: key = "D#"
+                    case 16: key = "E"
+                    case 17: key = "F"
+                    case 18: key = "F#"
+                    case 19: key = "G"
+                    case 20: key = "G#"
+                    case 21: key = "A"
+                    case 22: key = "A#"
+                    case 23: key = "B"
+            except Exception as e:
+                log(str(e))
+        song = songNo
+        log(str(song))
+        log(str(bpm))
+        log(str(key))
+        log(str(currentPart))
+        log(str(nextPart))
+    else: 
+        song = CurrentSong[0]
+        bpm = CurrentSong[2]
+        key = CurrentSong[1]
+        currentPart = CurrentSong[3]
+        nextPart = CurrentSong[3]
+    return song, key, bpm, currentPart, nextPart
+
+def checkSongPreset(CurrentSong):
+    midiIn = midi.receive()
+    try:
+        if midiIn.control is 3: 
+            songNo = midiIn.value
+        else: songNo = CurrentSong
+    except Exception:
+        print("Error")
+        songNo = CurrentSong
+    return songNo
