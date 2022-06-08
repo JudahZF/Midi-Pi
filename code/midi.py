@@ -6,7 +6,6 @@ from adafruit_midi.note_on import NoteOn
 from adafruit_midi.program_change import ProgramChange
 from settings import liveFile
 
-
 uart = busio.UART(board.GP0, board.GP1, baudrate=31250, timeout=0.001)  # init UART
 midi_in_channel = 1
 midi_out_channel = 1
@@ -34,14 +33,14 @@ def sendPC(program):
 
 # Check CC 3 For SOng Change
 def checkSong(CurrentSong, mode):
+    midiIn = midi.receive()
     if mode == "Preset":
         songNo = CurrentSong
-        midiIn = midi.receive()
         try:
             if midiIn.control is 3: 
                 songNo = midiIn.value
         except Exception:
-                    songNo = CurrentSong  
+            print("Error")
         return songNo
     if mode == "Live":
         songName = []
@@ -55,7 +54,6 @@ def checkSong(CurrentSong, mode):
         except Exception: currentPart = ""
         try: nextPart = CurrentSong[3]
         except Exception: nextPart = ""
-        midiIn = midi.receive()
         try:
             if (midiIn.note == 5) & (midiIn.velocity > 0):
                 pass
@@ -86,7 +84,7 @@ def checkSong(CurrentSong, mode):
                 if midiIn.note == 3:
                     bpm = midiIn.velocity
                 if midiIn.note == 2:
-                    bpm += midiIn.velocity
+                    bpm += (128^midiIn.velocity)-1
                 if (12 <= midiIn.note) & (midiIn.note <= 23):
                     if midiIn.note == 12: key = "C"
                     elif midiIn.note == 13: key = "C#"
