@@ -1,6 +1,11 @@
 import midi, time, ui, midi, sys
 import effects as FX
 from log import log
+import sys
+import countio
+import digitalio
+import board
+import pwmio
 
 class liveAction:
     def __init__(self, program, value, state, doToggle):
@@ -53,18 +58,21 @@ class mode ():
 
         # Import Effects to Actions Array
         for i in range(20):
-            if i == 0 or (4 <= i and i <= 6) or i == 10 or (14 <= i and i <= 16):
-                actions.append(liveAction((self.ccstart+i), 127, False, 1))
-            else: actions.append(liveAction((self.ccstart+i), 127, False, 0))
+            actions.append(liveAction((self.ccstart+i), 127, False, 0))
             log(str("Added CC: " + str(i+self.ccstart)))
 
         self.lcd.print("#")
 
         # Import Footswitches
-        for i in range(10):
+        timeSince = []
+        pinCountArray = []
+        for i in range(len(self.FootSwitches)):
             self.FootSwitches[i].setAction(
                 actions[i], actions[i+10]
             )
+            self.FootSwitches[i].setDIOMode(False)
+            pinCountArray.append(countio.Counter(self.FootSwitches[i].pin, edge=countio.Edge.RISE, pull=digitalio.Pull.DOWN))
+            timeSince.append(time.monotonic())
         log(str("Set Up Footswitches"))
         self.lcd.print("#")
 
@@ -82,10 +90,16 @@ class mode ():
         # Print First GUI
         PrintGui("Clear", "")
         log(str("Main UI Printed"))
-        LastState = [False, False, False, False, False, False, False, False, False, False]
+        
+        
         while True:
             # Check for New Song
-            FSin = FX.checkFS(self.FootSwitches, LastState)
-            LastState = FSin[3]
-            if FSin[0] is True:
-                log(str(FSin[1] + " Pressed"))
+            # FSin = FX.checkFSNoHold(self.FootSwitches, LastState)
+            for i in range(0, len(self.FootSwitches)):
+                if pinCountArray[i].count >= 1:
+                    now = time.monotonic()
+                    pinCountArray[i].reset()
+                    if (timeSince[i] < (now-0.15)):
+                        self.FootSwitches[i].tap()
+                        timeSince[i] = now
+                        log(str("FS " + str(i) + " Tapped"))

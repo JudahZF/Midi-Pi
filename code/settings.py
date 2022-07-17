@@ -42,9 +42,9 @@ except Exception as e:
 try:
     file = open("live.json", "r")
     liveFile = json.load(file)
-    CC = liveFile["CCStart"]
+    cc = liveFile["CCStart"]
     file.close()
 except Exception as e:
     print("Error: " + str(e))
-    CC = ""
+    cc = ""
     liveFile = ""

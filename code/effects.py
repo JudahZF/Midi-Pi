@@ -1,6 +1,7 @@
 import midi
 import time
 import digitalio
+import countio
 
 class action:
     def __init__(self, name, typeNo, program, value, state):
@@ -29,6 +30,7 @@ class action:
 
 class footSwitch:
     def __init__(self, number, pin):
+        self.pin = pin
         self.no = number
         self.io = digitalio.DigitalInOut(pin)
         self.io.direction = digitalio.Direction.INPUT
@@ -39,15 +41,27 @@ class footSwitch:
         self.tapAction = self.tapAction
         self.holdAction = self.holdAction
 
+    def setDIOMode(self, on):
+        if on == True:
+            self.io = digitalio.DigitalInOut(pin)
+            self.io.direction = digitalio.Direction.INPUT
+            self.io.pull = digitalio.Pull.DOWN
+            self.IO = self.io
+        else:
+            try:
+                self.io.deinit()
+            except Exception as e:
+                print(e)
+
     # Set The actions of the Footswitch
     def setAction(self, action, holdAction):
         self.tapAction = action
         self.holdAction = holdAction
 
-    def tap(self):
+    def tap(self, ):
         try:
-            self.tapAction.toggle()
             print("Tap")
+            self.tapAction.toggle()
         except  Exception as E:
             print(str(E))
 
@@ -60,21 +74,22 @@ class footSwitch:
 
 # FS setup
 
-def checkFS(FS, LastState):
+def checkFSNoHold(FS, LastState):
     tapped = False
     x = 0
     held = ""
     no = 0
-    for i in FS:
-        # Check For pressed Footswitch
-        if (i.IO.value is not LastState[i]) and (i.IO.value is True):
+    for i in range(0, len(FS)):
+        # Check For pressed Footswitch (bool(FS[i].IO.value) is not LastState[i]) and 
+        if (bool(FS[i].IO.value) is True):
             no = x
-            i.tap()
+            FS[i].tap()
             held = ("FS " + str(x) + " Tapped")
             tapped = True
             LastState[i] = not LastState[i]
         else: x = x + 1
     return [tapped, held, no, LastState]
+
 
 def checkFS(FS, LastState, Htime):
     tapped = False

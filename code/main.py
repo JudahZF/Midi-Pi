@@ -1,4 +1,4 @@
-from settings import settingsFile, mode, midiHost, presetFile, CC
+from settings import settingsFile, mode, midiHost, presetFile, cc
 import busio, board, digitalio, json, sys, time, usb_midi, ui, midi, presets, live, performance
 import effects as FX
 from log import log
@@ -51,16 +51,16 @@ lcd.print(" Booting: ")
 # Define Footswitches 6-15
 FootSwitches = [
   # FX.footSwitch(Footswitch Number, GPIO Pin Number),
-    FX.footSwitch(0, board.GP4),
-    FX.footSwitch(1, board.GP5),
-    FX.footSwitch(2, board.GP6),
-    FX.footSwitch(3, board.GP7),
-    FX.footSwitch(4, board.GP8),
-    FX.footSwitch(5, board.GP9),
-    FX.footSwitch(6, board.GP10),
-    FX.footSwitch(7, board.GP11),
-    FX.footSwitch(8, board.GP12),
-    FX.footSwitch(9, board.GP13),
+    #FX.footSwitch(0, board.GP4), # 0
+    FX.footSwitch(0, board.GP5), # 1
+    #FX.footSwitch(2, board.GP6), # 2
+    FX.footSwitch(1, board.GP7), # 3
+    #FX.footSwitch(4, board.GP8), # 4
+    FX.footSwitch(2, board.GP9), # 5
+    #FX.footSwitch(6, board.GP10), # 6
+    FX.footSwitch(4, board.GP11), # 7
+    #FX.footSwitch(8, board.GP12), # 8
+    #FX.footSwitch(5, board.GP13), # 9
 ]
 lcd.print("#")
 
@@ -76,10 +76,9 @@ if (settingsFile["firstSetup"] is True):
 midi.setupMidi(midiHost)
 log(str("Set Up Midi: " + midiHost))
 lcd.print("#")
-if mode == "Preset":
+run = performance.mode(lcd, presetFile, FootSwitches, midiHost, cc)
+if mode == "Preset": 
     run = presets.mode(lcd, presetFile, FootSwitches, midiHost)
-elif mode == "Live":
-    run = live.mode(lcd, presetFile, FootSwitches, midiHost, CC)
-elif mode == "Perf":
-    run = performance.mode(lcd, presetFile, FootSwitches, midiHost, CC)
+elif mode == "Live": 
+    run = live.mode(lcd, presetFile, FootSwitches, midiHost, cc)
 run.run()
