@@ -2,3 +2,5 @@
 __pycache__/
 code/settings.json
 */.DS_Store
+code/.DS_Store
+code/lib/.DS_Store
